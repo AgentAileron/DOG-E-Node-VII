@@ -211,7 +211,10 @@ project.lock.json
 
 # Specific files
 code/auth_token.txt
+
+# Auto-added
 *.props
 code/obj/code.csproj.nuget.g.props
 code/obj/Debug/netcoreapp2.1/code.assets.cache
 *.cache
+code/obj/code.csproj.nuget.g.props
