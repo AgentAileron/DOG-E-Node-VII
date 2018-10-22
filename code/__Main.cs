@@ -1,20 +1,21 @@
 ﻿/* MAIN PROGRAM FOR DOG-E Node VII
  * AgentAileron 2018
  * LM: 22-10-2018
- */
+*/
 
 using System;
 using System.IO;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using DSharpPlus;
+using DSharpPlus.CommandsNext;
 
 
-namespace DOGE_E{
-    class Program{
+namespace DogeNode7{
+    class ProgramCode{
 
-        static DiscordClient bot;
         static string auth_token;
+        static DiscordClient bot;
+        static CommandsNextModule cmd_module;
 
         // == INITIALISATION == //
         static void Main(string[] args){
@@ -44,21 +45,32 @@ namespace DOGE_E{
 
         // == ASYNC EXECUTION == //
         static async Task MainAsync(string[] args){
-            // Initialise bot
+
+            // Re-Initialise bot on async call
             bot = new DiscordClient(new DiscordConfiguration{
                 Token = auth_token,
-                TokenType = TokenType.Bot
+                TokenType = TokenType.Bot,
+                UseInternalLogHandler = true,
+                LogLevel = LogLevel.Debug
             });
 
+            // Bot received a message notification
             bot.MessageCreated += async e =>{
                 if (e.Message.Content.ToLower().StartsWith("!ping"))
                     await e.Message.RespondAsync("pong!");
             };
 
+            // Initialise Command Interpreter
+            cmd_module = bot.UseCommandsNext(new CommandsNextConfiguration{
+                StringPrefix = "$"
+            });
+
+            cmd_module.RegisterCommands<CommandListRegular>();     // Register all regular defined commands
+
+            // Async triggers
             await bot.ConnectAsync();
             await Task.Delay(-1);
-
         }
 
-    }
-}
+    } // Class boundary
+} // NameSpace boundary
