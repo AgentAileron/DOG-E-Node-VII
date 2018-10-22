@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 using DSharpPlus;
 
 
-namespace code{
+namespace DOGE_E{
     class Program{
 
+        static DiscordClient bot;
         static string auth_token;
 
         // == INITIALISATION == //
@@ -35,15 +36,28 @@ namespace code{
             // Print a message on successful initialisation
             Console.WriteLine("-//- DOG-E Initialised successfully! -//-");
             Console.WriteLine("Auth token: " + auth_token);
+
+            // Begin asynchronous instance
+            MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
         }
+
 
         // == ASYNC EXECUTION == //
         static async Task MainAsync(string[] args){
             // Initialise bot
-            DiscordClient bot = new DiscordClient(new DiscordConfiguration{
+            bot = new DiscordClient(new DiscordConfiguration{
                 Token = auth_token,
                 TokenType = TokenType.Bot
             });
+
+            bot.MessageCreated += async e =>{
+                if (e.Message.Content.ToLower().StartsWith("!ping"))
+                    await e.Message.RespondAsync("pong!");
+            };
+
+            await bot.ConnectAsync();
+            await Task.Delay(-1);
+
         }
 
     }
