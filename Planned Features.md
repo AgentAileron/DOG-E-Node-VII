@@ -94,6 +94,9 @@
 			- make ascii art from image
 			- ML Recognition of pictures, python lib call
 			
+		> Anonymous whispers
+			- Only allowed when users share a server, and bot can DM target
+			- Presents only message text without user sending's details
 		
 	**Elevated:**
 		> Server Admin
