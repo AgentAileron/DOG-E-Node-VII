@@ -4,6 +4,7 @@
 */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,9 +39,11 @@ namespace DogeNode7{
 
         [Command("uptime"), Description("Returns how long the bot has been contiguously online for")]
         public async Task repeat(CommandContext ctx){
+            
+            // -- Get timespan and construct necessary info -- //
 
-            //TimeSpan timeelapsed = DateTime.Now - BotStats.starttime;       // Gets actual time since bot launch
-            TimeSpan timeelapsed = new TimeSpan(0, 1, 30, 0, 0);            // Sets debug timespan
+            TimeSpan timeelapsed = DateTime.Now - BotStats.starttime;       // Gets actual time since bot launch
+            //TimeSpan timeelapsed = new TimeSpan(0, 0, 13, 0, 0);            // Sets debug timespan
 
             // Creates array that hold values for each metric, and a bool for if they're greater than 0 (IE: whether to include them)
             double[] timeinfo = {
@@ -51,6 +54,8 @@ namespace DogeNode7{
             };
 
             string[] strtimenames = {" seconds", " minutes", " hours", " days"};
+
+            // -- Change values to suit output rules -- //
 
             // <= 2 mins
             if (timeelapsed.TotalMinutes <= 2){
@@ -64,29 +69,46 @@ namespace DogeNode7{
             }
             // <= 48 hrs
             else if (timeelapsed.TotalHours <= 48){
-                timeinfo[2] += (timeinfo[3] * 60);
+                timeinfo[2] += (timeinfo[3] * 24);
                 timeinfo[3] = 0;
             }
+            
+            // -- Construct the string representing uptime -- //
 
-            string timeOut = "";
+            // Find out how many non-zero values exist
+            int count = 0;
             int i = 0;
-            bool andused = false;
+            while (i < 4){
+                if (timeinfo[i] > 0){count ++ ;}
+                i ++;
+            }
 
-            while (i < 3){
+            string timeOut = "";    // Time string will be constructed in this
+            bool andused = false;   // True when one element is added and there are more to add
+
+            i = 0;                  // Reset counter for for loop
+
+            // Construct time elapsed string
+            while (i < 4){
+                // Zero vals won't be outputted
                 if (timeinfo[i] > 0){
+                    // Some text is in the string
                     if (andused){
                         timeOut = timeinfo[i].ToString() + strtimenames[i] + ", " + timeOut;
-                    }else if ((i == 3) || (i == 2 && timeinfo[3] == 0)){
-                        timeOut = timeinfo[i].ToString() + strtimenames[i] + timeOut;
-                    }else{
+                    // No text in the string yet, and there will be more than one
+                    }else if (count > 1){
                         timeOut = "and " + timeinfo[i].ToString() + strtimenames[i];
                         andused = true;
+                    // There is only one element in the string to place
+                    }else{
+                        timeOut = timeinfo[i].ToString() + strtimenames[i];
+                        break;
                     }
                 }
                 i++;
             } 
 
-            await ctx.RespondAsync($"I have been running for `{timeOut}`");
+            await ctx.RespondAsync($"I have been running for `{timeOut}`");     // Output the constructed response message
 
         }
 
