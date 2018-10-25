@@ -23,7 +23,7 @@ namespace DogeNode7{
             await ctx.RespondAsync($"Hi there {ctx.User.Mention}");
         }
 
-        // this command takes a member as an argument; you can pass one by username, nickname, id, or mention
+        // Greets the user specified as an argument
         [Command("greet"), Description("Says hi to specified user."), Aliases("sayhi", "say_hi")]
         public async Task Greet(CommandContext ctx, [Description("The user to say hi to.")] DiscordMember member){
             // Trigger typing indicator for bot
@@ -36,7 +36,7 @@ namespace DogeNode7{
             await ctx.RespondAsync($"{emoji} Hello, {member.Mention}!");
         }
 
-
+        // Responds with a nicely formatted description of uptime elapsed
         [Command("uptime"), Description("Returns how long the bot has been contiguously online for")]
         public async Task repeat(CommandContext ctx){
             
