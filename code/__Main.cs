@@ -11,6 +11,13 @@ using DSharpPlus.CommandsNext;
 
 
 namespace DogeNode7{
+    // Class to hold bot stats
+    public class BotStats{
+        public static DateTime starttime = DateTime.Now;
+    }
+
+
+    // Main Program Class
     class ProgramCode{
 
         static string auth_token;
@@ -37,6 +44,7 @@ namespace DogeNode7{
             // Print a message on successful initialisation
             Console.WriteLine("-//- DOG-E Initialised successfully! -//-");
             Console.WriteLine("Auth token: " + auth_token);
+            Console.WriteLine(BotStats.starttime);
 
             // Begin asynchronous instance
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
