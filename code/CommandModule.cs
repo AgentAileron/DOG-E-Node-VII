@@ -18,12 +18,12 @@ namespace DogeNode7{
     public class CommandListRegular{
         
         // Returns hello to the calling user (TODO: beef it up a tad)
-        [Command("hello"), Description("Returns a hello to the calling user")]
+        [Command("hello"), Description("Returns a hello to the calling user"), Aliases("hey", "hi", "g'day")]
         public async Task Hello(CommandContext ctx){
-            await ctx.RespondAsync($"Hi there {ctx.User.Mention}");
+            await ctx.RespondAsync($"G'day {ctx.User.Mention}!");
         }
 
-        // Greets the user specified as an argument
+        // Greets a specified user
         [Command("greet"), Description("Says hi to specified user."), Aliases("sayhi", "say_hi")]
         public async Task Greet(CommandContext ctx, [Description("The user to say hi to.")] DiscordMember member){
             // Trigger typing indicator for bot
@@ -37,20 +37,22 @@ namespace DogeNode7{
         }
 
         // Responds with a nicely formatted description of uptime elapsed
-        [Command("uptime"), Description("Returns how long the bot has been contiguously online for")]
+        [Command("uptime"), Description("Returns how long the bot has been online for / time since last reboot")]
         public async Task repeat(CommandContext ctx){
+
+            await ctx.TriggerTypingAsync();     // Trigger typing indicator for bot
             
             // -- Get timespan and construct necessary info -- //
 
-            TimeSpan timeelapsed = DateTime.Now - BotStats.starttime;       // Gets actual time since bot launch
-            //TimeSpan timeelapsed = new TimeSpan(0, 0, 13, 0, 0);            // Sets debug timespan
+            TimeSpan time_elapsed = DateTime.Now - BotStats.starttime;       // Gets actual time since bot launch
+            //TimeSpan time_elapsed = new TimeSpan(0, 0, 13, 0, 0);            // Sets debug timespan
 
             // Creates array that hold values for each metric, and a bool for if they're greater than 0 (IE: whether to include them)
             double[] timeinfo = {
-                Math.Floor((double)(timeelapsed.Seconds)),
-                Math.Floor((double)(timeelapsed.Minutes)),
-                Math.Floor((double)(timeelapsed.Hours  )),
-                Math.Floor((double)(timeelapsed.Days   ))
+                Math.Floor((double)(time_elapsed.Seconds)),
+                Math.Floor((double)(time_elapsed.Minutes)),
+                Math.Floor((double)(time_elapsed.Hours  )),
+                Math.Floor((double)(time_elapsed.Days   ))
             };
 
             string[] strtimenames = {" seconds", " minutes", " hours", " days"};
@@ -58,17 +60,17 @@ namespace DogeNode7{
             // -- Change values to suit output rules -- //
 
             // <= 2 mins
-            if (timeelapsed.TotalMinutes <= 2){
+            if (time_elapsed.TotalMinutes <= 2){
                 timeinfo[0] += (timeinfo[1] * 60);
                 timeinfo[1] = 0;
             }
             // <= 90 mins
-            else if (timeelapsed.TotalMinutes <= 90){
+            else if (time_elapsed.TotalMinutes <= 90){
                 timeinfo[1] += (timeinfo[2] * 60);
                 timeinfo[2] = 0;
             }
             // <= 48 hrs
-            else if (timeelapsed.TotalHours <= 48){
+            else if (time_elapsed.TotalHours <= 48){
                 timeinfo[2] += (timeinfo[3] * 24);
                 timeinfo[3] = 0;
             }
