@@ -45,6 +45,11 @@
 			- Reddit
 			- Twitter
 		
+		> Memes
+			- Respond to 'Alexa play {x}'
+			- Random meme fetcher (+ agile source config)
+			- Meme generator (+ format args in, toptext bottom text etc.)
+		
 		> Cyberchef
 			- See about direct calls to the JS interface
 		
