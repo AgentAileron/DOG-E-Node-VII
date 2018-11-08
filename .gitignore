@@ -219,3 +219,5 @@ code/obj/Debug/netcoreapp2.1/code.assets.cache
 *.cache
 code/obj/code.csproj.nuget.g.props
 code/obj/project.assets.json
+Dev Chat Advice.txt
+Planned Features.md
