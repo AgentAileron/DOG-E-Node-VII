@@ -1,11 +1,11 @@
 # DOG-E Node VII
 
----
-
 ### Dog-like Obedience: GNU-Experimental Node mk7
 
 *Designed for use with genuine Blackberry™ Products only.*
 
-Experimental human interaction node designed for [REDACTED], inducing parsing errors may result in death or [REDACTED]. !!NB!! - this project is on indefinite hiatus following incident on ■■/■■/■■■■, where inadequate containment resulted in [DATA EXPUNGED].
+A test bot for working with the Discord API via the D#+ wrapper. 
 
-Contact [REDACTED] for further information.
+---
+
+Cheers for all the help in getting set up @Emzi0767 !
