@@ -62,21 +62,16 @@ namespace DogeNode7{
         [Command("about"), Description("Returns bot info")]
         public async Task About(CommandContext ctx){
             DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder();
-            //embedOut.Color = new DiscordColor();
-            embedOut.Title = "Title";
-            embedOut.WithAuthor("LOLOL My name here I think?", "https://Google.com");
-            embedOut.Url = "https://youtube.com.au"; // Of title
-            embedOut.Description = "Description";
-            embedOut.ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Social_Network_Analysis_Visualization.png/220px-Social_Network_Analysis_Visualization.png";
-            embedOut.ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Petersen_graph_3-coloring.svg/1200px-Petersen_graph_3-coloring.svg.png";
-            //embedOut.Timestamp = new DateTime();
 
-            embedOut.AddField("Name1","Value1", true);
-            embedOut.AddField("Name2","Value2", true);
-            embedOut.AddField("Name3","Value3");
+            embedOut.Color = new DiscordColor(255, 71, 26);
+            embedOut.WithAuthor("Doge Node VII");
+            embedOut.Title = "Dog-like Obidience: GNU - Experimental Node mk7";
+            embedOut.Description = $"Created by <@!211776725875556352> - Such bot, wowe";
+            embedOut.ThumbnailUrl = "https://cdn.discordapp.com/app-icons/494447566428307469/98fb09740e2645f657b1cd6c7e05c957.png?size=256";
+
+            embedOut.AddField("Stuff","OwO filler text", true);
 
             DiscordEmbed output = embedOut.Build();
-
             await ctx.RespondAsync("",false,output);
         }
 

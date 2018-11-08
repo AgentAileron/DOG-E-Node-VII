@@ -30,6 +30,18 @@
           "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {}
         }
       },
+      "DSharpPlus.Interactivity/3.2.3": {
+        "type": "package",
+        "dependencies": {
+          "DSharpPlus": "3.2.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1705,6 +1717,27 @@
         "lib/netstandard1.3/DSharpPlus.CommandsNext.xml",
         "lib/netstandard2.0/DSharpPlus.CommandsNext.dll",
         "lib/netstandard2.0/DSharpPlus.CommandsNext.xml"
+      ]
+    },
+    "DSharpPlus.Interactivity/3.2.3": {
+      "sha512": "dqNj48DOxExZml4LfPHXXKrBMm7XSk1a9uMTb6jGA163vdLieAU99vLSbeKhfLMoHFFYAu3Nc/QzO5jarEvptQ==",
+      "type": "package",
+      "path": "dsharpplus.interactivity/3.2.3",
+      "files": [
+        "dsharpplus.interactivity.3.2.3.nupkg.sha512",
+        "dsharpplus.interactivity.nuspec",
+        "lib/net45/DSharpPlus.Interactivity.dll",
+        "lib/net45/DSharpPlus.Interactivity.xml",
+        "lib/net46/DSharpPlus.Interactivity.dll",
+        "lib/net46/DSharpPlus.Interactivity.xml",
+        "lib/net47/DSharpPlus.Interactivity.dll",
+        "lib/net47/DSharpPlus.Interactivity.xml",
+        "lib/netstandard1.1/DSharpPlus.Interactivity.dll",
+        "lib/netstandard1.1/DSharpPlus.Interactivity.xml",
+        "lib/netstandard1.3/DSharpPlus.Interactivity.dll",
+        "lib/netstandard1.3/DSharpPlus.Interactivity.xml",
+        "lib/netstandard2.0/DSharpPlus.Interactivity.dll",
+        "lib/netstandard2.0/DSharpPlus.Interactivity.xml"
       ]
     },
     "Microsoft.CSharp/4.3.0": {
@@ -5766,6 +5799,7 @@
     ".NETCoreApp,Version=v2.1": [
       "DSharpPlus >= 3.2.3",
       "DSharpPlus.CommandsNext >= 3.2.3",
+      "DSharpPlus.Interactivity >= 3.2.3",
       "Microsoft.NETCore.App >= 2.1.0"
     ]
   },
@@ -5818,6 +5852,10 @@
             "version": "[3.2.3, )"
           },
           "DSharpPlus.CommandsNext": {
+            "target": "Package",
+            "version": "[3.2.3, )"
+          },
+          "DSharpPlus.Interactivity": {
             "target": "Package",
             "version": "[3.2.3, )"
           },
