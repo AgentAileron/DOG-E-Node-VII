@@ -1,6 +1,6 @@
 /* COMMAND MODULE FOR DOG-E Node VII
  * AgentAileron 2018
- * LM: 22-10-2018
+ * LM: 08-11-2018
 */
 
 using System;
@@ -16,12 +16,16 @@ using DSharpPlus.Entities;
 
 namespace DogeNode7{
     public class CommandListRegular{
+
+
         
         // Returns hello to the calling user (TODO: beef it up a tad)
         [Command("hello"), Description("Returns a hello to the calling user"), Aliases("hey", "hi", "g'day")]
         public async Task Hello(CommandContext ctx){
             await ctx.RespondAsync($"G'day {ctx.User.Mention}!");
         }
+
+
 
         // Greets a specified user
         [Command("greet"), Description("Says hi to specified user."), Aliases("sayhi", "say_hi")]
@@ -33,85 +37,47 @@ namespace DogeNode7{
             var emoji = DiscordEmoji.FromName(ctx.Client, ":wave:");
 
             // Print out - NB: '{}' are escaped, insides are parsed as strings and concat'd
-            await ctx.RespondAsync($"{emoji} Hello, {member.Mention}!");
+            await ctx.RespondAsync($"{emoji} Hello there, {member.Mention}!");
         }
+
+
 
         // Responds with a nicely formatted description of uptime elapsed
         [Command("uptime"), Description("Returns how long the bot has been online for / time since last reboot")]
-        public async Task repeat(CommandContext ctx){
+        public async Task UpTime(CommandContext ctx){
 
             await ctx.TriggerTypingAsync();     // Trigger typing indicator for bot
-            
-            // -- Get timespan and construct necessary info -- //
 
             TimeSpan time_elapsed = DateTime.Now - BotStats.starttime;       // Gets actual time since bot launch
             //TimeSpan time_elapsed = new TimeSpan(0, 0, 13, 0, 0);            // Sets debug timespan
 
-            // Creates array that hold values for each metric, and a bool for if they're greater than 0 (IE: whether to include them)
-            double[] timeinfo = {
-                Math.Floor((double)(time_elapsed.Seconds)),
-                Math.Floor((double)(time_elapsed.Minutes)),
-                Math.Floor((double)(time_elapsed.Hours  )),
-                Math.Floor((double)(time_elapsed.Days   ))
-            };
-
-            string[] strtimenames = {" seconds", " minutes", " hours", " days"};
-
-            // -- Change values to suit output rules -- //
-
-            // <= 2 mins
-            if (time_elapsed.TotalMinutes <= 2){
-                timeinfo[0] += (timeinfo[1] * 60);
-                timeinfo[1] = 0;
-            }
-            // <= 90 mins
-            else if (time_elapsed.TotalMinutes <= 90){
-                timeinfo[1] += (timeinfo[2] * 60);
-                timeinfo[2] = 0;
-            }
-            // <= 48 hrs
-            else if (time_elapsed.TotalHours <= 48){
-                timeinfo[2] += (timeinfo[3] * 24);
-                timeinfo[3] = 0;
-            }
-            
-            // -- Construct the string representing uptime -- //
-
-            // Find out how many non-zero values exist
-            int count = 0;
-            int i = 0;
-            while (i < 4){
-                if (timeinfo[i] > 0){count ++ ;}
-                i ++;
-            }
-
-            string timeOut = "";    // Time string will be constructed in this
-            bool andused = false;   // True when one element is added and there are more to add
-
-            i = 0;                  // Reset counter for for loop
-
-            // Construct time elapsed string
-            while (i < 4){
-                // Zero vals won't be outputted
-                if (timeinfo[i] > 0){
-                    // Some text is in the string
-                    if (andused){
-                        timeOut = timeinfo[i].ToString() + strtimenames[i] + ", " + timeOut;
-                    // No text in the string yet, and there will be more than one
-                    }else if (count > 1){
-                        timeOut = "and " + timeinfo[i].ToString() + strtimenames[i];
-                        andused = true;
-                    // There is only one element in the string to place
-                    }else{
-                        timeOut = timeinfo[i].ToString() + strtimenames[i];
-                        break;
-                    }
-                }
-                i++;
-            } 
+            string timeOut = Reg.BotStats.FormatTime(time_elapsed);
 
             await ctx.RespondAsync($"I have been running for `{timeOut}`");     // Output the constructed response message
 
+        }
+
+
+
+        [Command("about"), Description("Returns bot info")]
+        public async Task About(CommandContext ctx){
+            DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder();
+            //embedOut.Color = new DiscordColor();
+            embedOut.Title = "Title";
+            embedOut.WithAuthor("LOLOL My name here I think?", "https://Google.com");
+            embedOut.Url = "https://youtube.com.au"; // Of title
+            embedOut.Description = "Description";
+            embedOut.ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Social_Network_Analysis_Visualization.png/220px-Social_Network_Analysis_Visualization.png";
+            embedOut.ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Petersen_graph_3-coloring.svg/1200px-Petersen_graph_3-coloring.svg.png";
+            //embedOut.Timestamp = new DateTime();
+
+            embedOut.AddField("Name1","Value1", true);
+            embedOut.AddField("Name2","Value2", true);
+            embedOut.AddField("Name3","Value3");
+
+            DiscordEmbed output = embedOut.Build();
+
+            await ctx.RespondAsync("",false,output);
         }
 
     } // Class boundary
