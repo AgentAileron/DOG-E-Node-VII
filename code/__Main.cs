@@ -62,11 +62,11 @@ namespace DogeNode7{
                 LogLevel = LogLevel.Debug
             });
 
-            // Bot received a message notification
+            /* Bot received a message notification (Now handled by command modules)
             bot.MessageCreated += async e =>{
                 if (e.Message.Content.ToLower().StartsWith("!ping"))
                     await e.Message.RespondAsync("pong!");
-            };
+            };*/
 
             // Initialise Command Interpreter
             cmd_module = bot.UseCommandsNext(new CommandsNextConfiguration{
