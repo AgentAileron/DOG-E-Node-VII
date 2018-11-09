@@ -41,7 +41,7 @@ namespace DogeNode7{
         }
 
 
-
+        
         // Responds with a nicely formatted description of uptime elapsed
         [Command("uptime"), Description("Returns how long the bot has been online for / time since last reboot")]
         public async Task UpTime(CommandContext ctx){
