@@ -73,7 +73,7 @@ namespace DogeNode7{
                 StringPrefix = "$"
             });
 
-            cmd_module.RegisterCommands<CommandListRegular>();     // Register and check all regular defined commands
+            cmd_module.RegisterCommands<CommandListTopLevel>();     // Register and check all regular defined commands
 
             // Async triggers
             await bot.ConnectAsync();

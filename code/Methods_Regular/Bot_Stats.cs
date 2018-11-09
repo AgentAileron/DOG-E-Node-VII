@@ -12,7 +12,7 @@ using DSharpPlus.Entities;
 
 
 namespace Reg{
-    public class BotStats{
+    public class StatMethod{
         
         public static string FormatTime(TimeSpan time_elapsed){
             // Creates array that hold values for each metric, and a bool for if they're greater than 0 (IE: whether to include them)

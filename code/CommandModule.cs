@@ -15,7 +15,7 @@ using DSharpPlus.Entities;
 
 
 namespace DogeNode7{
-    public class CommandListRegular{
+    public class CommandListTopLevel{
 
 
         
@@ -51,28 +51,37 @@ namespace DogeNode7{
             TimeSpan time_elapsed = DateTime.Now - BotStats.starttime;       // Gets actual time since bot launch
             //TimeSpan time_elapsed = new TimeSpan(0, 0, 13, 0, 0);            // Sets debug timespan
 
-            string timeOut = Reg.BotStats.FormatTime(time_elapsed);
+            string timeOut = Reg.StatMethod.FormatTime(time_elapsed);
 
             await ctx.RespondAsync($"I have been running for `{timeOut}`");     // Output the constructed response message
 
         }
 
 
-
-        [Command("about"), Description("Returns bot info")]
+        [Command("about"), Description("Returns bot info"), Aliases("info")]
         public async Task About(CommandContext ctx){
-            DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder();
+            DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder();   // Create embed
+            
+            // -- TODO: populate these --
+            int activeServers = 2;
+            string dSharpVersion = "3.4.002";
+            string botVersion = "0.2";
+            string randomFact = "Such obedience, many corporeal form - *wowe!*";
 
-            embedOut.Color = new DiscordColor(255, 71, 26);
-            embedOut.WithAuthor("Doge Node VII");
-            embedOut.Title = "Dog-like Obidience: GNU - Experimental Node mk7";
-            embedOut.Description = $"Created by <@!211776725875556352> - Such bot, wowe";
+
+            // Populate embed with info
+            embedOut.Color = new DiscordColor(221, 102, 42);
+            embedOut.WithAuthor("Dog-like Obedience: GNU - Experimental Node mk7");
+            embedOut.WithUrl("https://github.com/AgentAileron/DOG-E-Node-VII");
+            embedOut.Description = $"**Maintained by <@!211776725875556352> **\n{randomFact}\n";
             embedOut.ThumbnailUrl = "https://cdn.discordapp.com/app-icons/494447566428307469/98fb09740e2645f657b1cd6c7e05c957.png?size=256";
+            embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dSharpVersion} | DN7 v{botVersion}", 
+                        ""); // -- TODO: Add own dev logo here --
 
-            embedOut.AddField("Stuff","OwO filler text", true);
+            embedOut.AddField("Want a feature added?","http://bit.ly/DN7_FeatReq");
 
             DiscordEmbed output = embedOut.Build();
-            await ctx.RespondAsync("",false,output);
+            await ctx.RespondAsync("",false,output);    // Output embed (NB: 3rd arg in respondasync)
         }
 
     } // Class boundary
