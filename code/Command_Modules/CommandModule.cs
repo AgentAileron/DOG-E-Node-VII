@@ -41,7 +41,7 @@ namespace DogeNode7{
         }
 
 
-        
+
         // Responds with a nicely formatted description of uptime elapsed
         [Command("uptime"), Description("Returns how long the bot has been online for / time since last reboot")]
         public async Task UpTime(CommandContext ctx){
@@ -74,7 +74,7 @@ namespace DogeNode7{
             embedOut.WithAuthor("Dog-like Obedience: GNU - Experimental Node mk7");
             embedOut.WithUrl("https://github.com/AgentAileron/DOG-E-Node-VII");
             embedOut.Description = $"**Maintained by <@!211776725875556352> **\n{randomFact}\n";
-            embedOut.ThumbnailUrl = "https://raw.githubusercontent.com/AgentAileron/DOG-E-Node-VII/master/Media/Current%20DP.png";
+            embedOut.ThumbnailUrl = "https://cdn.discordapp.com/avatars/494447566428307469/5b602e21cb80a186edbf2728f72ff40a.png?size=512";
             embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dSharpVersion} | DN7 v{botVersion}", 
                         ""); // -- TODO: Add own dev logo here --
 
