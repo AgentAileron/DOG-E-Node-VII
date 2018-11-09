@@ -212,14 +212,6 @@ project.lock.json
 # Specific files
 code/auth_token.txt
 
-# Auto-added
-*.props
-code/obj/code.csproj.nuget.g.props
-code/obj/Debug/netcoreapp2.1/code.assets.cache
-*.cache
-code/obj/code.csproj.nuget.g.props
-code/obj/project.assets.json
-
 # Notes
 Dev Chat Advice.txt
 Planned Features.md
@@ -237,4 +229,11 @@ code/obj/Debug/netcoreapp2.1/code.AssemblyInfoInputs.cache
 code/obj/Debug/netcoreapp2.1/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
 code/obj/Debug/netcoreapp2.1/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
 code/obj/Debug/netcoreapp2.1/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+
+# Auto-added
+*.props
+code/obj/code.csproj.nuget.g.props
+code/obj/Debug/netcoreapp2.1/code.assets.cache
 *.cache
+code/obj/code.csproj.nuget.g.props
+code/obj/project.assets.json
