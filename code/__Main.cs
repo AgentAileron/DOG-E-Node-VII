@@ -13,6 +13,8 @@ using DSharpPlus.CommandsNext;
 namespace DogeNode7{
     // Class to hold bot stats
     public class BotStats{
+        public const string strPrefix = "$";
+
         public static DateTime starttime = DateTime.Now;
     }
 
@@ -64,16 +66,16 @@ namespace DogeNode7{
 
             /* Bot received a message notification (Now handled by command modules)
             bot.MessageCreated += async e =>{
-                if (e.Message.Content.ToLower().StartsWith("!ping"))
+                if (e.Message.Content.ToLower().StartsWith("$about"))
                     await e.Message.RespondAsync("pong!");
             };*/
 
             // Initialise Command Interpreter
             cmd_module = bot.UseCommandsNext(new CommandsNextConfiguration{
-                StringPrefix = "$"
+                StringPrefix = BotStats.strPrefix
             });
 
-            cmd_module.RegisterCommands<CommandListTopLevel>();     // Register and check all regular defined commands
+            cmd_module.RegisterCommands<CommandListTopLevel>();     // Register and check all top level commands
 
             // Async triggers
             await bot.ConnectAsync();

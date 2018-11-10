@@ -15,13 +15,14 @@ using DSharpPlus.Entities;
 
 
 namespace DogeNode7{
+    [RequirePermissions(Permissions.ReadMessageHistory)]
     public class CommandListTopLevel{
 
 
         
         // Returns hello to the calling user (TODO: beef it up a tad)
         [Command("hello"), Description("Returns a hello to the calling user"), Aliases("hey", "hi", "g'day")]
-        public async Task Hello(CommandContext ctx){
+        public async Task HelloAsync(CommandContext ctx){
             await ctx.RespondAsync($"G'day {ctx.User.Mention}!");
         }
 
@@ -29,7 +30,7 @@ namespace DogeNode7{
 
         // Greets a specified user
         [Command("greet"), Description("Says hi to specified user."), Aliases("sayhi", "say_hi")]
-        public async Task Greet(CommandContext ctx, [Description("The user to say hi to.")] DiscordMember member){
+        public async Task GreetAsync(CommandContext ctx, [Description("The user to say hi to.")] DiscordMember member){
             // Trigger typing indicator for bot
             await ctx.TriggerTypingAsync();
             
@@ -44,7 +45,7 @@ namespace DogeNode7{
 
         // Responds with a nicely formatted description of uptime elapsed
         [Command("uptime"), Description("Returns how long the bot has been online for / time since last reboot")]
-        public async Task UpTime(CommandContext ctx){
+        public async Task UpTimeAsync(CommandContext ctx){
 
             await ctx.TriggerTypingAsync();     // Trigger typing indicator for bot
 
@@ -58,9 +59,29 @@ namespace DogeNode7{
         }
 
 
+
+        // Returns a list of online users (TODO: limit count)
+        [Command("w"), Description("Returns list of online users (useful for Discord over irc)"), Aliases("online_users")]
+        public async Task OnlineUsersAsync(CommandContext ctx){
+            await ctx.TriggerTypingAsync();
+
+            // get list of all members in guild
+            var getList = ctx.Guild.GetAllMembersAsync();
+            await getList;
+            var memberList = getList.Result.ToArray();
+
+            foreach (var member in memberList){
+                if (member.Presence.Status != UserStatus.Offline){
+                    // TODO: Finish this after making arg interpreter
+                }
+            }
+        }
+
+
+
+        // Responds with an embed containing bot info (and a randomly chosen fact thingo)
         [Command("about"), Description("Returns bot info"), Aliases("info")]
-        public async Task About(CommandContext ctx){
-            DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder();   // Create embed
+        public async Task AboutAsync(CommandContext ctx){
             
             // -- TODO: populate these --
             int activeServers = 2;
@@ -68,17 +89,19 @@ namespace DogeNode7{
             string botVersion = "0.2";
             string randomFact = "Such obedience, many corporeal form - *wowe!*";
 
+            // Create an embed object
+            DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder{
+                Url = "https://github.com/AgentAileron/DOG-E-Node-VII",
+                ThumbnailUrl = "https://cdn.discordapp.com/avatars/494447566428307469/5b602e21cb80a186edbf2728f72ff40a.png?size=512",
+                Description = $"**Maintained by <@!211776725875556352> **\n{randomFact}\n",
+                Color = new DiscordColor(221, 102, 42)
+            };
 
             // Populate embed with info
-            embedOut.Color = new DiscordColor(221, 102, 42);
             embedOut.WithAuthor("Dog-like Obedience: GNU - Experimental Node mk7");
-            embedOut.WithUrl("https://github.com/AgentAileron/DOG-E-Node-VII");
-            embedOut.Description = $"**Maintained by <@!211776725875556352> **\n{randomFact}\n";
-            embedOut.ThumbnailUrl = "https://cdn.discordapp.com/avatars/494447566428307469/5b602e21cb80a186edbf2728f72ff40a.png?size=512";
             embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dSharpVersion} | DN7 v{botVersion}", 
-                        ""); // -- TODO: Add own dev logo here --
-
-            embedOut.AddField("Want a feature added?","http://bit.ly/DN7_FeatReq");
+                        "https://i.imgur.com/qnvjk8C.png");
+            embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
 
             DiscordEmbed output = embedOut.Build();
             await ctx.RespondAsync("",false,output);    // Output embed (NB: 3rd arg in respondasync)

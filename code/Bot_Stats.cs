@@ -1,4 +1,4 @@
-/* Methods that return bot statistics
+/* Methods pertaining to bot statistics
  * DOG-E Node VII
  * AgentAileron 2018
  * LM: 08-11-2018
@@ -14,6 +14,7 @@ using DSharpPlus.Entities;
 namespace Reg{
     public class StatMethod{
         
+        // Formats a given TimeSpan into human readable format
         public static string FormatTime(TimeSpan time_elapsed){
             // Creates array that hold values for each metric, and a bool for if they're greater than 0 (IE: whether to include them)
             double[] timeinfo = {
