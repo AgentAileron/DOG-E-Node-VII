@@ -55,17 +55,124 @@ namespace CommandModules{
         }
 
 
-        // Returns a list of online users (TODO: limit count)
+        // Returns a list of online users
         [Command("online_users"), Description("Returns list of online users (useful for Discord over irc)"), Aliases("w")]
         public async Task OnlineUsersAsync(CommandContext ctx){
             await ctx.TriggerTypingAsync();
+            
+            // Initialise expected arguments to pass
+            Dictionary<string,bool> expectedArgs = new Dictionary<string, bool>();
+                expectedArgs["A"] = false;  // Show All user statuses
+                expectedArgs["o"] = false;  // Show online  (def)
+                expectedArgs["d"] = false;  // Show do not Disturb
+                expectedArgs["i"] = false;  // Show idle
+                expectedArgs["O"] = false;  // Show Offline
+                expectedArgs["b"] = false;  // Show bots
+                expectedArgs["u"] = false;  // Show users   (def)
 
-            // get list of all members in guild
+                expectedArgs["n"] = true;   // Number of people to show (def 5, max 40)
+                expectedArgs["p"] = true;   // page number to show (where multiple pages exist)
+
+            // Get list of users in server
             var memberList = ctx.Guild.GetAllMembersAsync().Result.ToArray();
 
-            foreach (var member in memberList){
+            // Interpret args, set defaults if none given
+            Dictionary<string,string> args = Reg.Utility.GetArgs(ctx.Message.ToString(), expectedArgs);
 
+            int dispCount = 5;
+            int pageNum = 1;
+            if (args.Count == 0){   // No args passed
+                args["o"] = null;
+                args["u"] = null;
+            }else{
+                if (args.ContainsKey("n")){ // dispcount defined
+                    Int32.TryParse(args["n"], out dispCount);
+                    if (dispCount > 40 || dispCount < 0){dispCount = 40;}    // Range check
+                }
+                if (args.ContainsKey("p")){ // pagenum defined
+                    Int32.TryParse(args["p"], out pageNum);
+                    if (pageNum < 0){pageNum = 1;}      // Range check
+                }
             }
+
+            // Output users if netiher bots nor users are specified
+            if (!args.ContainsKey("u") && !args.ContainsKey("b")){
+                args["u"] = null;
+            }
+
+            // set all status flags to true if "A" is true
+            if (args.ContainsKey("A")){
+                args["o"] = null;
+                args["d"] = null;
+                args["i"] = null;
+                args["O"] = null;
+            }
+
+            // Create needed lists
+            string onlineMatches    = "```css \n**Online**";
+            string noDisturbMatches = "```diff \n**Do Not Disturb**";
+            string idleMatches      = "```fix \n**Idle**";
+            string offlineMatches   = "``` \n**Offline**";
+
+            // Iterate array until requried number of users gotten, or end of array reached
+            int counter = 0;
+            int matchesFound = 0;
+            while (counter < memberList.Length && matchesFound < dispCount+1){
+                var currentMember = memberList[counter];                    // Current member in server list
+                var currentMemberStatus = currentMember.Presence.Status;    // Status of current member
+                bool statusCheck = false;                                   // Flag that determines if user passes params
+
+                // Check status matches required, and mark
+                if      (args.ContainsKey("o") && currentMemberStatus == UserStatus.Online)         {statusCheck = true;}
+                else if (args.ContainsKey("d") && currentMemberStatus == UserStatus.DoNotDisturb)   {statusCheck = true;}
+                else if (args.ContainsKey("i") && currentMemberStatus == UserStatus.Idle)           {statusCheck = true;}
+                else if (args.ContainsKey("O") && currentMemberStatus == UserStatus.Offline)        {statusCheck = true;}
+
+                // If status check passed, check for user type, pagenum and re-evaluate
+                if (statusCheck){
+                    if (args.ContainsKey("u") && !currentMember.IsBot){
+                        matchesFound++;
+                        if (matchesFound < dispCount*(pageNum-1)){  // Unmark for adding if below required pages
+                            statusCheck = false;
+                        }
+                    }else if (args.ContainsKey("b")){
+                        matchesFound++;
+                        if (matchesFound < dispCount*(pageNum-1)){  // Unmark for adding if below required pages
+                            statusCheck = false;
+                        }
+                    }
+                }
+
+                // If user still passed, add to relevant output list
+                if (statusCheck){
+                    string formattedLine = String.Format("{1,15} | {2}#{3}", currentMember.Nickname, currentMember.Username, currentMember.Discriminator);
+                    if (currentMemberStatus == UserStatus.Online){
+                        onlineMatches = String.Concat(onlineMatches, "\n ", formattedLine);
+                    }else if (currentMemberStatus == UserStatus.DoNotDisturb){
+                        onlineMatches = String.Concat(onlineMatches, "\n-", formattedLine);
+                    }else if (currentMemberStatus == UserStatus.Idle){
+                        onlineMatches = String.Concat(onlineMatches, "\n ", formattedLine);
+                    }else{
+                        onlineMatches = String.Concat(onlineMatches, "\n ", formattedLine);
+                    }
+                }
+                counter++;
+            }
+
+            // Finally, print user lists to chat
+            if (args.ContainsKey("o") && onlineMatches.Length > 18){
+                await ctx.RespondAsync(onlineMatches + "\n```");
+            }
+            if (args.ContainsKey("d") && onlineMatches.Length > 27){
+                await ctx.RespondAsync(noDisturbMatches + "\n```");
+            }
+            if (args.ContainsKey("i") && onlineMatches.Length > 16){
+                await ctx.RespondAsync(idleMatches + "\n```");
+            }
+            if (args.ContainsKey("d") && onlineMatches.Length > 16){
+                await ctx.RespondAsync(offlineMatches + "\n```");
+            }
+            await ctx.RespondAsync($"`matches in range: {matchesFound}, page {pageNum}`");
         }
 
 
@@ -101,7 +208,7 @@ namespace CommandModules{
         // This module is restricted access - use it for testing things
         [Command("test"), Description("A temp function - very unstable"), Hidden, RequireOwner]
         public async Task tempTestAsync(CommandContext ctx){
-            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame(""), UserStatus.DoNotDisturb);
+            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame("Wofe wofe, am DOG-E"), UserStatus.DoNotDisturb);
             await ctx.RespondAsync("done.");
         }
 

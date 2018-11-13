@@ -66,9 +66,8 @@ namespace DogeNode7{
 
             cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();     // Register and check all top level commands
 
-            // Connect the bot
-            await bot.ConnectAsync();
-            await Task.Delay(-1);   // Wait forever
+            await bot.ConnectAsync();   // Connect the bot
+            await Task.Delay(-1);       // Wait forever
         }
 
     } // Class boundary
