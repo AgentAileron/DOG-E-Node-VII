@@ -109,15 +109,15 @@ namespace CommandModules{
             }
 
             // Create needed lists
-            string onlineMatches    = "```css \n**Online**";
-            string noDisturbMatches = "```diff \n**Do Not Disturb**";
-            string idleMatches      = "```fix \n**Idle**";
-            string offlineMatches   = "``` \n**Offline**";
+            string onlineMatches    = "```css\n-- ONLINE --";
+            string noDisturbMatches = "```diff\n-- DO NOT DISTURB --";
+            string idleMatches      = "```fix\n-- IDLE --";
+            string offlineMatches   = "```\n-- Offline --";
 
             // Iterate array until requried number of users gotten, or end of array reached
             int counter = 0;
             int matchesFound = 0;
-            while (counter < memberList.Length && matchesFound < dispCount+1){
+            while (counter < memberList.Length && matchesFound < dispCount*(pageNum-1)+1){
                 var currentMember = memberList[counter];                    // Current member in server list
                 var currentMemberStatus = currentMember.Presence.Status;    // Status of current member
                 bool statusCheck = false;                                   // Flag that determines if user passes params
@@ -142,10 +142,16 @@ namespace CommandModules{
                         }
                     }
                 }
-
+                
                 // If user still passed, add to relevant output list
                 if (statusCheck){
-                    string formattedLine = String.Format("{1,15} | {2}#{3}", currentMember.Nickname, currentMember.Username, currentMember.Discriminator);
+                    string formattedLine = "";
+                    if (currentMember.Nickname != null){
+                        formattedLine = String.Format("{0,-18} | ({1})", currentMember.Username + "#" +currentMember.Discriminator, currentMember.Nickname);
+                    }else{
+                        formattedLine = currentMember.Username + "#" +currentMember.Discriminator;
+                    }
+
                     if (currentMemberStatus == UserStatus.Online){
                         onlineMatches = onlineMatches + "\n " + formattedLine;
                     }else if (currentMemberStatus == UserStatus.DoNotDisturb){
@@ -160,16 +166,16 @@ namespace CommandModules{
             }
 
             // Finally, print user lists to chat
-            if (args.ContainsKey("o") && onlineMatches.Length > 18){
+            if (args.ContainsKey("o") && onlineMatches.Length > 19){
                 await ctx.RespondAsync(onlineMatches + "\n```");
             }
-            if (args.ContainsKey("d") && onlineMatches.Length > 27){
+            if (args.ContainsKey("d") && onlineMatches.Length > 28){
                 await ctx.RespondAsync(noDisturbMatches + "\n```");
             }
-            if (args.ContainsKey("i") && onlineMatches.Length > 16){
+            if (args.ContainsKey("i") && onlineMatches.Length > 17){
                 await ctx.RespondAsync(idleMatches + "\n```");
             }
-            if (args.ContainsKey("O") && onlineMatches.Length > 16){
+            if (args.ContainsKey("O") && onlineMatches.Length > 17){
                 await ctx.RespondAsync(offlineMatches + "\n```");
             }
             await ctx.RespondAsync($"`matches in range: {matchesFound}, page {pageNum}`");
