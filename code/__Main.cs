@@ -1,6 +1,5 @@
 ﻿/* MAIN PROGRAM FOR DOG-E Node VII
  * AgentAileron 2018
- * LM: 22-10-2018
 */
 
 using System;
@@ -8,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
 
 
 namespace DogeNode7{
@@ -23,25 +23,14 @@ namespace DogeNode7{
     class ProgramCode{
 
         static string auth_token;
-        static DiscordClient bot;
+        public static DiscordClient bot;
         static CommandsNextModule cmd_module;
 
         // == INITIALISATION == //
         static void Main(string[] args){
 
             // -- Attempt to load in the auth token from file, halt execution otherwise --
-            try{
-                System.IO.StreamReader f = new System.IO.StreamReader(@"./auth_token.txt");
-                auth_token = f.ReadLine();
-            }catch (Exception e){
-                // FileNotFound Exception
-                if (e is FileNotFoundException){
-                    Console.WriteLine("Error loading auth token: auth_token.txt does not exist!");
-                    Environment.Exit(2);
-                }
-                // Unexpected exception type
-                else throw;
-            }
+            auth_token = Reg.Utility.GetFileContents(@"./auth_token.txt")[0];
 
             // Print a message on successful initialisation
             Console.WriteLine("-//- DOG-E Initialised successfully! -//-");
@@ -75,11 +64,11 @@ namespace DogeNode7{
                 StringPrefix = BotStats.strPrefix
             });
 
-            cmd_module.RegisterCommands<CommandListTopLevel>();     // Register and check all top level commands
+            cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();     // Register and check all top level commands
 
-            // Async triggers
+            // Connect the bot
             await bot.ConnectAsync();
-            await Task.Delay(-1);
+            await Task.Delay(-1);   // Wait forever
         }
 
     } // Class boundary

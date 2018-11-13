@@ -1,7 +1,6 @@
 /* Methods pertaining to bot statistics
  * DOG-E Node VII
  * AgentAileron 2018
- * LM: 08-11-2018
 */
 
 using System;

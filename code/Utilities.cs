@@ -1,10 +1,10 @@
 /* Utility methods for DN7
  * DOG-E Node VII
  * AgentAileron 2018
- * LM: 10-11-2018
 */
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
@@ -97,5 +97,31 @@ namespace Reg{
         }
 
         
+        // Gets all contents of the specified file, and returns its contents as a string array of each line in file
+        public static string[] GetFileContents(string filePath, int maxLines=250 ){
+            try{
+                const Int32 BufferSize = 1024;
+                using (var fileStream = File.OpenRead(@filePath)){
+                    using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize)){
+                        string line;
+                        List<string> bufferList = new List<string>();
+                        while ((line = streamReader.ReadLine()) != null){
+                            bufferList.Add(line);
+                        }
+                        string[] outArray = bufferList.ToArray();
+                        return outArray;
+                    }
+                }
+
+
+            }catch (Exception e){
+                if (e is FileNotFoundException){    // FileNotFound Exception
+                    Console.WriteLine($"Error reading file at {@filePath} - does it exist?");
+                    return null;
+                }
+                else throw;     // Unexpected exception type
+            }
+        }
+
     } // Class boundary
 } // NameSpace boundary

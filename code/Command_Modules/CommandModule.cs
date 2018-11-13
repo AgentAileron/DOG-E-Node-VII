@@ -1,6 +1,5 @@
 /* COMMAND MODULE FOR DOG-E Node VII
  * AgentAileron 2018
- * LM: 08-11-2018
 */
 
 using System;
@@ -14,10 +13,9 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
 
-namespace DogeNode7{
+namespace CommandModules{
     [RequirePermissions(Permissions.ReadMessageHistory)]
     public class CommandListTopLevel{
-
 
         
         // Returns hello to the calling user (TODO: beef it up a tad)
@@ -25,7 +23,6 @@ namespace DogeNode7{
         public async Task HelloAsync(CommandContext ctx){
             await ctx.RespondAsync($"G'day {ctx.User.Mention}!");
         }
-
 
 
         // Greets a specified user
@@ -42,14 +39,13 @@ namespace DogeNode7{
         }
 
 
-
         // Responds with a nicely formatted description of uptime elapsed
         [Command("uptime"), Description("Returns how long the bot has been online for / time since last reboot")]
         public async Task UpTimeAsync(CommandContext ctx){
 
             await ctx.TriggerTypingAsync();     // Trigger typing indicator for bot
 
-            TimeSpan time_elapsed = DateTime.Now - BotStats.starttime;       // Gets actual time since bot launch
+            TimeSpan time_elapsed = DateTime.Now - DogeNode7.BotStats.starttime;       // Gets actual time since bot launch
             //TimeSpan time_elapsed = new TimeSpan(0, 0, 13, 0, 0);            // Sets debug timespan
 
             string timeOut = Reg.StatMethod.FormatTime(time_elapsed);
@@ -59,24 +55,18 @@ namespace DogeNode7{
         }
 
 
-
         // Returns a list of online users (TODO: limit count)
-        [Command("w"), Description("Returns list of online users (useful for Discord over irc)"), Aliases("online_users")]
+        [Command("online_users"), Description("Returns list of online users (useful for Discord over irc)"), Aliases("w")]
         public async Task OnlineUsersAsync(CommandContext ctx){
             await ctx.TriggerTypingAsync();
 
             // get list of all members in guild
-            var getList = ctx.Guild.GetAllMembersAsync();
-            await getList;
-            var memberList = getList.Result.ToArray();
+            var memberList = ctx.Guild.GetAllMembersAsync().Result.ToArray();
 
             foreach (var member in memberList){
-                if (member.Presence.Status != UserStatus.Offline){
-                    // TODO: Finish this after making arg interpreter
-                }
+
             }
         }
-
 
 
         // Responds with an embed containing bot info (and a randomly chosen fact thingo)
@@ -106,6 +96,15 @@ namespace DogeNode7{
             DiscordEmbed output = embedOut.Build();
             await ctx.RespondAsync("",false,output);    // Output embed (NB: 3rd arg in respondasync)
         }
+
+
+        // This module is restricted access - use it for testing things
+        [Command("test"), Description("A temp function - very unstable"), Hidden, RequireOwner]
+        public async Task tempTestAsync(CommandContext ctx){
+            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame(""), UserStatus.DoNotDisturb);
+            await ctx.RespondAsync("done.");
+        }
+
 
     } // Class boundary
 } // NameSpace boundary
