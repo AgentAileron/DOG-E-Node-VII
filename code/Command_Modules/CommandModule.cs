@@ -121,7 +121,7 @@ namespace CommandModules{
                 var currentMember = memberList[counter];                    // Current member in server list
                 var currentMemberStatus = currentMember.Presence.Status;    // Status of current member
                 bool statusCheck = false;                                   // Flag that determines if user passes params
-
+                
                 // Check status matches required, and mark
                 if      (args.ContainsKey("o") && currentMemberStatus == UserStatus.Online)         {statusCheck = true;}
                 else if (args.ContainsKey("d") && currentMemberStatus == UserStatus.DoNotDisturb)   {statusCheck = true;}
@@ -147,13 +147,13 @@ namespace CommandModules{
                 if (statusCheck){
                     string formattedLine = String.Format("{1,15} | {2}#{3}", currentMember.Nickname, currentMember.Username, currentMember.Discriminator);
                     if (currentMemberStatus == UserStatus.Online){
-                        onlineMatches = String.Concat(onlineMatches, "\n ", formattedLine);
+                        onlineMatches = onlineMatches + "\n " + formattedLine;
                     }else if (currentMemberStatus == UserStatus.DoNotDisturb){
-                        onlineMatches = String.Concat(onlineMatches, "\n-", formattedLine);
+                        noDisturbMatches = noDisturbMatches + "\n-" + formattedLine;
                     }else if (currentMemberStatus == UserStatus.Idle){
-                        onlineMatches = String.Concat(onlineMatches, "\n ", formattedLine);
+                        idleMatches = idleMatches + "\n " + formattedLine;
                     }else{
-                        onlineMatches = String.Concat(onlineMatches, "\n ", formattedLine);
+                        offlineMatches = offlineMatches + "\n " + formattedLine;
                     }
                 }
                 counter++;
@@ -169,7 +169,7 @@ namespace CommandModules{
             if (args.ContainsKey("i") && onlineMatches.Length > 16){
                 await ctx.RespondAsync(idleMatches + "\n```");
             }
-            if (args.ContainsKey("d") && onlineMatches.Length > 16){
+            if (args.ContainsKey("O") && onlineMatches.Length > 16){
                 await ctx.RespondAsync(offlineMatches + "\n```");
             }
             await ctx.RespondAsync($"`matches in range: {matchesFound}, page {pageNum}`");
