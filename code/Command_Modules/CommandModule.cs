@@ -118,7 +118,6 @@ namespace CommandModules{
             int matchesFound = 0;
             foreach (var currentMember in memberList){
                 Console.WriteLine(currentMember.ToString());
-                    if(currentMember.Presence == null){Console.WriteLine("ASS");}   // TEMP
                 var currentMemberStatus = currentMember.Presence.Status;    // Status of current member
                 bool statusCheck = false;                                   // Flag that determines if user passes params
                 
@@ -213,19 +212,20 @@ namespace CommandModules{
         }
 
 
-        // This command is for doin' me a test
-        [Command("test"), Description("A temp function"), Hidden, RequireOwner]
+        // Temp command for testing
+        [Command("test"), Description("Temp function"), Hidden, RequireOwner]
         public async Task tempTestAsync(CommandContext ctx){
+
             var memberList = ctx.Guild.GetAllMembersAsync().Result.ToArray();
+
             foreach (var member in memberList){
                 await ctx.RespondAsync(member.ToString());    // Indicate current user
                 if (member.Presence == null){
-                    await ctx.RespondAsync("`-It's ~~dead~~ null, Jim`");  // if Presence is null, send extra message
+                    await ctx.RespondAsync("-It's ~~dead~~ null, Jim");  // if Presence is null, send extra message
                 }else{
                     await ctx.RespondAsync(member.Presence.Status.ToString());  // If there is a presence, detail it
                 }
             }
-            
         }
 
 
