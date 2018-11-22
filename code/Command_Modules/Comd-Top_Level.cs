@@ -55,8 +55,8 @@ namespace CommandModules{
         }
 
 
-        // Returns a list of online users
-        [Command("online_users"), Description("Returns list of online users (useful for Discord over irc)"), Aliases("w")]
+        // Returns a list of online users (IN SERIOUS NEED OF REWRITE)
+        [Command("online_users"), Description("Returns list of online users (useful for Discord over irc) (UNSTABLE)"), Aliases("w")]
         public async Task OnlineUsersAsync(CommandContext ctx){
             await ctx.TriggerTypingAsync();
             
@@ -116,16 +116,20 @@ namespace CommandModules{
 
             // Iterate array until requried number of users gotten, or end of array reached
             int matchesFound = 0;
+            UserStatus currentMemberStatus;
             foreach (var currentMember in memberList){
-                Console.WriteLine(currentMember.ToString());
-                var currentMemberStatus = currentMember.Presence.Status;    // Status of current member
+                if (currentMember.Presence == null){
+                    currentMemberStatus = UserStatus.Offline;
+                }else{
+                    currentMemberStatus = currentMember.Presence.Status;    // Status of current member
+                }
                 bool statusCheck = false;                                   // Flag that determines if user passes params
                 
                 // Check status matches required, and mark
                 if      (args.ContainsKey("o") && currentMemberStatus == UserStatus.Online)         {statusCheck = true;}
                 else if (args.ContainsKey("d") && currentMemberStatus == UserStatus.DoNotDisturb)   {statusCheck = true;}
                 else if (args.ContainsKey("i") && currentMemberStatus == UserStatus.Idle)           {statusCheck = true;}
-                else if (args.ContainsKey("O") && currentMemberStatus == UserStatus.Offline)        {statusCheck = true;}
+                else if (args.ContainsKey("O") && currentMemberStatus == UserStatus.Offline)        {statusCheck = true;}   // Todo: Check why presence returns null
 
                 // If status check passed, check for user type, pagenum and re-evaluate
                 if (statusCheck){
@@ -179,7 +183,7 @@ namespace CommandModules{
             if (args.ContainsKey("O") && onlineMatches.Length > 17){
                 await ctx.RespondAsync(offlineMatches + "\n```");
             }
-            await ctx.RespondAsync($"`matches in range: {matchesFound}, page {pageNum}`");
+            await ctx.RespondAsync($"`matches in range: {matchesFound+1}, page {pageNum}`");
         }
 
 

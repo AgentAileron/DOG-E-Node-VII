@@ -18,8 +18,8 @@ namespace CommandModules{
     [Description("Commands that ~~use a pseudo random number generator~~ **are expertly decided with advanced AI!**")]
     public class CommandListPseudoRNG{
 
-        [Command("otp")]
-        public async Task stuff(CommandContext ctx){
+        [Command("otp"), Description("Finds the OTP strength of two users - can change over time")]
+        public async Task stuff(CommandContext ctx, [Description("First user")] DiscordMember member1, [Description("Second user")] DiscordMember member2){
             await ctx.RespondAsync("success");
         }
     } // Class boundary
