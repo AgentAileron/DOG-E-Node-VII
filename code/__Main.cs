@@ -65,6 +65,7 @@ namespace DogeNode7{
             });
 
             cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();     // Register and check all top level commands
+            cmd_module.RegisterCommands<CommandModules.CommandListPseudoRNG>();
 
             await bot.ConnectAsync();   // Connect the bot
             await Task.Delay(-1);       // Wait forever
