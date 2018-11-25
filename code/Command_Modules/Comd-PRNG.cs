@@ -43,11 +43,16 @@ namespace CommandModules{
                 expectedArgs["b"] = false;  // Only outputs 0 or 1
 
             // Interpret args, set defaults if none given
-            Dictionary<string,string> args = Reg.Utility.GetArgs(ctx.Message.ToString(), expectedArgs);
+            Dictionary<string,string> args = Reg.Util.GetArgs(ctx.Message.ToString(), expectedArgs);
 
             // Reply with boolean and exit
             if (args.ContainsKey("b")){
-                await ctx.RespondAsync((random.Next(0,2) == 1).ToString());
+                var result = random.Next(0,2);
+                if (result == 1){
+                    await ctx.RespondAsync(Reg.StrUtil.CSSBlock("True"));
+                }else{
+                    await ctx.RespondAsync(Reg.StrUtil.FixBlock("False"));
+                }
                 return;
             }
 

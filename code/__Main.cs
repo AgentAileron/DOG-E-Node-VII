@@ -30,7 +30,7 @@ namespace DogeNode7{
         static void Main(string[] args){
 
             // -- Attempt to load in the auth token from file, halt execution otherwise --
-            auth_token = Reg.Utility.GetFileContents(@"./auth_token.txt")[0];
+            auth_token = Reg.Util.GetFileContents(@"./auth_token.txt")[0];
 
             // Print a message on successful initialisation
             Console.WriteLine("-//- DOG-E Initialised successfully! -//-");

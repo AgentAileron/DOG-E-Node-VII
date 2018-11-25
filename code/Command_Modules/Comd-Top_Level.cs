@@ -77,7 +77,7 @@ namespace CommandModules{
             var memberList = ctx.Guild.GetAllMembersAsync().Result.ToArray();
 
             // Interpret args, set defaults if none given
-            Dictionary<string,string> args = Reg.Utility.GetArgs(ctx.Message.ToString(), expectedArgs);
+            Dictionary<string,string> args = Reg.Util.GetArgs(ctx.Message.ToString(), expectedArgs);
 
             int dispCount = 5;
             int pageNum = 1;

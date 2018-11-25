@@ -13,7 +13,7 @@ using DSharpPlus.Entities;
 
 namespace Reg{
 
-    public class Utility{
+    public class Util{
         
         // Returns any args passed in a command, based on those expected by the command
         public static Dictionary<string,string> GetArgs(string message, Dictionary<string,bool> expectedArgs){
