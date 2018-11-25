@@ -23,9 +23,21 @@ namespace CommandModules{
         public async Task OTPAsync(CommandContext ctx, [Description("First user")] DiscordMember member1, [Description("Second user")] DiscordMember member2){
             string botSelfId = Reg.Util.GetFileContents(@"./auth_token.txt")[1];   // Get the Id of this bot (must be defined in auth token file)
             
+            // Create the embed to eventually output
+            DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder{
+                
+            };
+            embedOut.WithAuthor($"{member1.Username} x {member2.Username}");
+
             // Is either input member this bot?
             if ((member1.Id.ToString() == botSelfId) || (member2.Id.ToString() == botSelfId)){
-                
+                // Are both members this bot?
+                if (member1 == member2){
+                    var output = embedOut.Build();
+                    await ctx.RespondAsync(null,false,output);
+                }else{
+
+                }
             }
 
             // Get the seeded generator for the otp based on usernames
