@@ -211,8 +211,7 @@ namespace CommandModules{
                         "https://i.imgur.com/qnvjk8C.png");
             embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
 
-            DiscordEmbed output = embedOut.Build();
-            await ctx.RespondAsync("",false,output);    // Output embed (NB: 3rd arg in respondasync)
+            await ctx.RespondAsync("",false,embedOut.Build());    // Output embed (NB: 3rd arg in respondasync)
         }
 
 

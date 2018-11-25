@@ -1,0 +1,10 @@
+sudo rm -rf /
+405: FORBIDDEN
+CONNECTION_REFUSED
+!! Avast has detected a threat !!
+HELO THERE
+HELO THERE
+HELO THERE
+Sharing lewd source code...
+Connection Priority: #1
+Granting root priviliges...
