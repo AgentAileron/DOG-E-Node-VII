@@ -72,11 +72,10 @@ namespace CommandModules{
                 }
 
                 // Constant calculations (initial compatibility score)
-                Random seededrng = new Random((int)Math.Max(member1.GetHashCode(), member2.GetHashCode()));   // Seeded PRNG (Hash codes)
+                Random seededrng = new Random((int)Math.Floor(Math.Max(nameVal1, nameVal2) % Math.Min(nameVal1, nameVal2)));    // PRNG (Usernames)
                 int Compatibility = seededrng.Next() % 100;     // Val based on names only (constant)
 
-                seededrng = new Random((int)Math.Floor(Math.Max(nameVal1, nameVal2) % Math.Min(nameVal1, nameVal2)));    // Re-seeded PRNG (Usernames)
-                int offsetRange = seededrng.Next(0,30); // Used as constant range for offset variation
+                int offsetRange = seededrng.Next(0,25); // Used as constant range for offset variation
 
                 // Variable calculations (offset)
                 Random rng = new Random();   // unseeded PRNG
@@ -88,10 +87,60 @@ namespace CommandModules{
                 }
 
                 Compatibility += offset;
+                embedOut.Description = $"**Compatibility: {Compatibility}%**\n ";    // Set compatibility score, first half of description output
+                
+                // ----------------------------
 
-                embedOut.Description = $"**Compatibility: {Compatibility}%**\n";    // Set compatibility score, first half of description output
+                // Determine what kind of matching has been made
+                string wordListPath;
+                if (member1 != member2){    // Unique members
+                    if (member1.IsBot || member2.IsBot){    // At least 1 member is a bot
+                        if (member2.IsBot && member2.IsBot){    // Both members are bots
+                            wordListPath = @"./Phrase_Lists/otp-2bots.txt";
+                        }else{  // 1 member is bot, 1 is human
+                            wordListPath = @"./Phrase_Lists/otp-bothuman.txt";
+                        }
+                    }else{  // Neither members are bots
+                        wordListPath = @"./Phrase_Lists/otp-2humans.txt";
+                    }
+                }else{  // Self OTP
+                    if (member1.IsBot){ // self OTP of bot
+                        wordListPath = @"./Phrase_Lists/otp-selfbot.txt";    
+                    }else{  // self OTP of human
+                        wordListPath = @"./Phrase_Lists/otp-selfhuman.txt";
+                    }
+                }
+
+                string[] wordList = Reg.Util.GetFileContents(wordListPath); // Get appropriate wordList for OTP found
+
+                // Iterate to correct line in file, and add to description (autoadjusts to number of lines in file)
+                string CompatDesc = "";
+                for (int i=0; i < wordList.Length; i++){
+                    if ((100*i) / wordList.Length >= Compatibility){
+                        CompatDesc = wordList[i];
+                        break;
+                    }
+                }
+
+                if (CompatDesc != ""){ embedOut.Description += Reg.StrUtil.Italic(CompatDesc); }    // Append the found compatibility description to the embed (if not blank)
+
+                // ----------------------------
+
+                // Based on compatibility percent, determine colour to use
+                int[] minCol = {230,0,0};
+                int[] maxCol = {64,255,0};
+                int[] outColour = {0,0,0};
+
+                for (int j=0; j <= 2; j++){
+                    outColour[j] = minCol[j] + (int)((maxCol[j] - minCol[j]) * Compatibility / 100);
+                }
+
+                embedOut.Color = new DiscordColor((byte)outColour[0],(byte)outColour[1],(byte)outColour[2]);  // Set embed colour
 
             }
+
+            embedOut.WithFooter("<Generated dialogue goes here>");  // Temp
+            embedOut.AddField("Ship Names", "<Generated ship names go here>");   // Temp
 
             // Finally, construct embed and output
             await ctx.RespondAsync(null,false,embedOut.Build());
