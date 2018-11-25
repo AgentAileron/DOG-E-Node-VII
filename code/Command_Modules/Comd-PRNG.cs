@@ -28,7 +28,7 @@ namespace CommandModules{
         [Command("num"), Aliases("generate", "gen")]
         [Description(@"**Returns a random integer within the specified range**
         
-        `-b` - output a boolean *(0 or 1)*
+        `-b` - output a boolean *(True or False)*
 
         `-l <number>` - define lower bound *(default is 0)*
         `-u <number>` - define upper bound *(default is 10)*")]
@@ -56,8 +56,20 @@ namespace CommandModules{
                 return;
             }
 
+            int lowerBound = 0;
+            int upperBound = 10;
 
+            // Check if a lower bound was given
+            if (args.ContainsKey("l")){
+                Int32.TryParse(args["l"], out lowerBound);
+            }
 
+            // Check if an upper bound was given
+            if (args.ContainsKey("u")){
+                Int32.TryParse(args["u"], out upperBound);
+            }
+
+            await ctx.RespondAsync(Reg.StrUtil.InlineCode(random.Next(lowerBound, upperBound + 1).ToString())); // Output random num
         }
 
     } // Class boundary
