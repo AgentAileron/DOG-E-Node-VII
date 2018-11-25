@@ -223,12 +223,7 @@ namespace CommandModules{
             var memberList = ctx.Guild.GetAllMembersAsync().Result.ToArray();
 
             foreach (var member in memberList){
-                await ctx.RespondAsync(member.ToString());    // Indicate current user
-                if (member.Presence == null){
-                    await ctx.RespondAsync("-It's ~~dead~~ null, Jim");  // if Presence is null, send extra message
-                }else{
-                    await ctx.RespondAsync(member.Presence.Status.ToString());  // If there is a presence, detail it
-                }
+                await ctx.RespondAsync(member.Username + " : " + member.Id.ToString());
             }
         }
 

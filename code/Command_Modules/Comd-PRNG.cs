@@ -21,7 +21,23 @@ namespace CommandModules{
         // Returns the 'OTP' percentage match of two input users
         [Command("otp"), Description("**Finds the OTP strength of two users - can change over time**")]
         public async Task OTPAsync(CommandContext ctx, [Description("First user")] DiscordMember member1, [Description("Second user")] DiscordMember member2){
-            await ctx.RespondAsync("success");
+            string botSelfId = Reg.Util.GetFileContents(@"./auth_token.txt")[1];   // Get the Id of this bot (must be defined in auth token file)
+            
+            // Is either input member this bot?
+            if ((member1.Id.ToString() == botSelfId) || (member2.Id.ToString() == botSelfId)){
+                
+            }
+
+            // Get the seeded generator for the otp based on usernames
+            double nameVal1 = 0;
+            double nameVal2 = 0;
+            foreach (var letter in member1.Username){
+                nameVal1 += Convert.ToUInt32(letter);
+            }
+            foreach (var letter in member2.Username){
+                nameVal2 += Convert.ToUInt32(letter);
+            }
+            
         }
 
         // Generates a random number and returns it
