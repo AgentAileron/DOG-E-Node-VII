@@ -19,14 +19,14 @@ namespace CommandModules{
 
         
         // Returns hello to the calling user (TODO: beef it up a tad)
-        [Command("hello"), Description("Returns a hello to the calling user"), Aliases("hey", "hi", "g'day")]
+        [Command("hello"), Description("**Returns a hello to the calling user**"), Aliases("hey", "hi", "g'day")]
         public async Task HelloAsync(CommandContext ctx){
             await ctx.RespondAsync($"G'day {ctx.User.Mention}!");
         }
 
 
         // Greets a specified user
-        [Command("greet"), Description("Says hi to specified user."), Aliases("sayhi", "say_hi")]
+        [Command("greet"), Description("**Says hi to specified user**"), Aliases("sayhi", "say_hi")]
         public async Task GreetAsync(CommandContext ctx, [Description("The user to say hi to.")] DiscordMember member){
             // Trigger typing indicator for bot
             await ctx.TriggerTypingAsync();
@@ -40,7 +40,7 @@ namespace CommandModules{
 
 
         // Responds with a nicely formatted description of uptime elapsed
-        [Command("uptime"), Description("Returns how long the bot has been online for / time since last reboot")]
+        [Command("uptime"), Description("**Returns how long the bot has been online for / time since last reboot**")]
         public async Task UpTimeAsync(CommandContext ctx){
 
             await ctx.TriggerTypingAsync();     // Trigger typing indicator for bot
@@ -56,7 +56,7 @@ namespace CommandModules{
 
 
         // Returns a list of online users (IN SERIOUS NEED OF REWRITE)
-        [Command("online_users"), Description("Returns list of online users (useful for Discord over irc) (UNSTABLE)"), Aliases("w")]
+        [Command("online_users"), Description("**Returns list of online users (useful for Discord over irc) [UNSTABLE]**"), Aliases("w")]
         public async Task OnlineUsersAsync(CommandContext ctx){
             await ctx.TriggerTypingAsync();
             
