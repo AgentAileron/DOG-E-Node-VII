@@ -42,6 +42,43 @@
           "lib/netstandard2.0/DSharpPlus.Interactivity.dll": {}
         }
       },
+      "Google.Apis/1.36.1": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis.Core": "1.36.1",
+          "Newtonsoft.Json": "10.0.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        }
+      },
+      "Google.Apis.Core/1.36.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        }
+      },
+      "Google.Apis.Customsearch.v1/1.36.1.1369": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.36.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Customsearch.v1.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Customsearch.v1.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1738,6 +1775,70 @@
         "lib/netstandard1.3/DSharpPlus.Interactivity.xml",
         "lib/netstandard2.0/DSharpPlus.Interactivity.dll",
         "lib/netstandard2.0/DSharpPlus.Interactivity.xml"
+      ]
+    },
+    "Google.Apis/1.36.1": {
+      "sha512": "NBfotn7kOSd1biulilvCu3CIWr5kI4gXBNGGZyvOgE+ilR06zTPY9kPSVblYUoYPsXFvouZOS8GYPhnpnAK/Zw==",
+      "type": "package",
+      "path": "google.apis/1.36.1",
+      "files": [
+        ".signature.p7s",
+        "google.apis.1.36.1.nupkg.sha512",
+        "google.apis.nuspec",
+        "lib/net45/Google.Apis.PlatformServices.dll",
+        "lib/net45/Google.Apis.dll",
+        "lib/net45/Google.Apis.pdb",
+        "lib/net45/Google.Apis.xml",
+        "lib/netstandard1.3/Google.Apis.dll",
+        "lib/netstandard1.3/Google.Apis.pdb",
+        "lib/netstandard1.3/Google.Apis.xml",
+        "lib/netstandard2.0/Google.Apis.dll",
+        "lib/netstandard2.0/Google.Apis.pdb",
+        "lib/netstandard2.0/Google.Apis.xml"
+      ]
+    },
+    "Google.Apis.Core/1.36.1": {
+      "sha512": "UVcewN+O3kQ0bJ+pSH10RLc2vMNmgBGetXGY9HQms3W0PXWqiIh2PioVggwrfLmL/6wYBJA9N3l+vA/C2yS0kw==",
+      "type": "package",
+      "path": "google.apis.core/1.36.1",
+      "files": [
+        ".signature.p7s",
+        "google.apis.core.1.36.1.nupkg.sha512",
+        "google.apis.core.nuspec",
+        "lib/net45/Google.Apis.Core.dll",
+        "lib/net45/Google.Apis.Core.pdb",
+        "lib/net45/Google.Apis.Core.xml",
+        "lib/netstandard1.3/Google.Apis.Core.dll",
+        "lib/netstandard1.3/Google.Apis.Core.pdb",
+        "lib/netstandard1.3/Google.Apis.Core.xml",
+        "lib/netstandard2.0/Google.Apis.Core.dll",
+        "lib/netstandard2.0/Google.Apis.Core.pdb",
+        "lib/netstandard2.0/Google.Apis.Core.xml"
+      ]
+    },
+    "Google.Apis.Customsearch.v1/1.36.1.1369": {
+      "sha512": "Inv0AVWj12VwROSAZnojLF3wFo+sCwSIGCdzFtK/uHtyzVaCk8MW6vfMn5oJy6O3CY+uaa4mBep0MmfKNvnznQ==",
+      "type": "package",
+      "path": "google.apis.customsearch.v1/1.36.1.1369",
+      "files": [
+        ".signature.p7s",
+        "google.apis.customsearch.v1.1.36.1.1369.nupkg.sha512",
+        "google.apis.customsearch.v1.nuspec",
+        "lib/net40/Google.Apis.Customsearch.v1.dll",
+        "lib/net40/Google.Apis.Customsearch.v1.pdb",
+        "lib/net40/Google.Apis.Customsearch.v1.xml",
+        "lib/net45/Google.Apis.Customsearch.v1.dll",
+        "lib/net45/Google.Apis.Customsearch.v1.pdb",
+        "lib/net45/Google.Apis.Customsearch.v1.xml",
+        "lib/netstandard1.0/Google.Apis.Customsearch.v1.dll",
+        "lib/netstandard1.0/Google.Apis.Customsearch.v1.pdb",
+        "lib/netstandard1.0/Google.Apis.Customsearch.v1.xml",
+        "lib/netstandard1.3/Google.Apis.Customsearch.v1.dll",
+        "lib/netstandard1.3/Google.Apis.Customsearch.v1.pdb",
+        "lib/netstandard1.3/Google.Apis.Customsearch.v1.xml",
+        "lib/netstandard2.0/Google.Apis.Customsearch.v1.dll",
+        "lib/netstandard2.0/Google.Apis.Customsearch.v1.pdb",
+        "lib/netstandard2.0/Google.Apis.Customsearch.v1.xml"
       ]
     },
     "Microsoft.CSharp/4.3.0": {
@@ -5800,6 +5901,7 @@
       "DSharpPlus >= 3.2.3",
       "DSharpPlus.CommandsNext >= 3.2.3",
       "DSharpPlus.Interactivity >= 3.2.3",
+      "Google.Apis.Customsearch.v1 >= 1.36.1.1369",
       "Microsoft.NETCore.App >= 2.1.0"
     ]
   },
@@ -5858,6 +5960,10 @@
           "DSharpPlus.Interactivity": {
             "target": "Package",
             "version": "[3.2.3, )"
+          },
+          "Google.Apis.Customsearch.v1": {
+            "target": "Package",
+            "version": "[1.36.1.1369, )"
           },
           "Microsoft.NETCore.App": {
             "target": "Package",

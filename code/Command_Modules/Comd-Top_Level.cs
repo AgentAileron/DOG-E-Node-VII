@@ -12,6 +12,8 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
+using Google.Apis.Customsearch.v1;
+
 
 namespace CommandModules{
     [RequirePermissions(Permissions.ReadMessageHistory)]
@@ -212,6 +214,33 @@ namespace CommandModules{
             embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
 
             await ctx.RespondAsync("",false,embedOut.Build());    // Output embed (NB: 3rd arg in respondasync)
+        }
+
+
+        // Responds with the first n results of a google search (TODO: Add more metasearch providers)
+        [Command("search"), Aliases("s")]
+        [Description(@"**Runs a Google search on the input and returns the result(s)**")]
+        public async Task SearchAsync(CommandContext ctx, [RemainingText] string searchInput){
+            await ctx.TriggerTypingAsync();
+
+            // Initialise custom search instance
+            CustomsearchService gSearch = new CustomsearchService(new Google.Apis.Services.BaseClientService.Initializer{
+                ApplicationName = "DOGENode7",
+                ApiKey = Reg.Util.GetFileContents(@"./auth_token.txt")[4]
+            });
+
+            CseResource.ListRequest listRequest = gSearch.Cse.List(searchInput);
+            listRequest.Cx = "013372514763418131173:osz9az3ojby"; 
+            var search = listRequest.Execute();
+
+            string output = "```";
+            foreach (var item in search.Items){
+                output = output + "\nTitle: " + item.Title.ToString();
+                output = output + "\nLink : " + item.Link.ToString() + "\n";
+            }
+            output += "\n```";
+
+            await ctx.RespondAsync(output);
         }
 
 
