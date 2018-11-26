@@ -212,7 +212,7 @@ namespace CommandModules{
             embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dSharpVersion} | DN7 v{botVersion}", 
                         "https://i.imgur.com/qnvjk8C.png");
             embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
-            embedOut.AddField("Add me to your own server! (TEMPORARILY DISABLED)", Formatter.MaskedUrl("Default Permissions", 
+            embedOut.AddField("Add me to your own server!", Formatter.MaskedUrl("Default Permissions", 
                                 new Uri("https://discordapp.com/oauth2/authorize?client_id=494447566428307469&scope=bot&permissions=1341643968")));
 
             await ctx.RespondAsync("",false,embedOut.Build());    // Output embed (NB: 3rd arg in respondasync)
