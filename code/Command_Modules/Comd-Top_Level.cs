@@ -196,7 +196,7 @@ namespace CommandModules{
             // -- TODO: populate these --
             int activeServers = 2;
             string dSharpVersion = "<TODO>";
-            string botVersion = "0.2";
+            string botVersion = Reg.Util.GetFileContents(@"./version.txt")[0];
             string randomFact = "Such obedience, many corporeal form - *wowe!*";
 
             // Create an embed object
@@ -327,10 +327,15 @@ namespace CommandModules{
 
         // Temp command for testing
         [Command("test"), Description("Temp function"), Hidden, RequireOwner]
-        public async Task tempTestAsync(CommandContext ctx){
+        public async Task tempTestAsync(CommandContext ctx, [RemainingText] string msgContents){
 
-            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame("Memes"), UserStatus.Online);
-            await ctx.RespondAsync("*mmm*, delicious federal crimes");
+            var memberList = ctx.Guild.Members;
+            foreach (var member in memberList){
+                if (member.Id.ToString() == "292602024850227210"){
+                    var DM = await DogeNode7.ProgramCode.bot.CreateDmAsync(member);
+                    await DM.SendMessageAsync(msgContents);
+                }
+            }
         }
 
 

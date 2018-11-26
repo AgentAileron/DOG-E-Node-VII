@@ -68,19 +68,7 @@ namespace DogeNode7{
             bot.MessageCreated += async e =>{
                 if (e.Message.Content.ToLower().StartsWith("$about"))
                     await e.Message.RespondAsync("pong!");
-            };*/        
-            
-            bot.DmChannelCreated += async newDm =>{
-                Console.WriteLine("New DM made");
-                Console.WriteLine(newDm.Channel.ToString());
-                Console.WriteLine(newDm.Client.ToString());
-            };
-
-            bot.DmChannelDeleted += async killDm =>{
-                Console.WriteLine("DM killed");
-                Console.WriteLine(killDm.Channel.ToString());
-                Console.WriteLine(killDm.Client.ToString());
-            };
+            };*/
 
             // Initialise Command Interpreter
             cmd_module = bot.UseCommandsNext(new CommandsNextConfiguration{
