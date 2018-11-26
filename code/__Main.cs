@@ -38,10 +38,10 @@ namespace DogeNode7{
             Console.WriteLine("Auth token: " + auth_token);
             Console.WriteLine("Init time:  " + BotStats.starttime);
 
-            // Begin asynchronous instance
+            // Begin asynchronous instance (Blocks this thread indefinitely)
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
 
-            Console.WriteLine("THIS TEXT SHOULD NEVER PRINT");
+            Console.WriteLine("THIS TEXT SHOULD NEVER PRINT");  // Unreachable, unless MainAsync returns
 
         }
 
@@ -49,7 +49,7 @@ namespace DogeNode7{
         // == ASYNC EXECUTION == //
         static async Task MainAsync(string[] args){
 
-            // Re-Initialise bot on async call
+            // Initialise bot
             bot = new DiscordClient(new DiscordConfiguration{
                 Token = auth_token,
                 TokenType = TokenType.Bot,
@@ -57,7 +57,8 @@ namespace DogeNode7{
                 LogLevel = LogLevel.Error
             });
 
-            bot.MessageCreated += async e =>{   // TEMP
+            // Temp handler for DMs (until DMs are handled properly in commandsnext)
+            bot.MessageCreated += async e =>{
                 if (e.Channel.IsPrivate){
                     Console.WriteLine($"DM <{e.Author.Username}>: {e.Message.Content}");
                 }
@@ -69,6 +70,11 @@ namespace DogeNode7{
                     await e.Message.RespondAsync("pong!");
             };*/
 
+            foreach (var item in bot.Guilds){
+                Console.WriteLine(item.ToString());
+            }
+            
+
             // Initialise Command Interpreter
             cmd_module = bot.UseCommandsNext(new CommandsNextConfiguration{
                 StringPrefix = BotStats.strPrefix
@@ -79,8 +85,6 @@ namespace DogeNode7{
 
             await bot.ConnectAsync();   // Connect the bot
             await Task.Delay(-1);       // Wait forever
-
-            Console.WriteLine("THIS TEXT SHOULD NEVER PRINT");
         }
 
     } // Class boundary
