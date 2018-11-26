@@ -289,8 +289,13 @@ namespace CommandModules{
                 }
             }else{
                 searchInput = argIn + " " + searchInput;
+                engineName = "Google"; 
+                embedOut.Color = new DiscordColor( 72,133,237); 
+                engineCX = "013372514763418131173:osz9az3ojby";
             }
 
+
+            // Exit when NSFW search requested in SFW channel
             if (isNSFW && !ctx.Channel.IsNSFW){
                 await ctx.RespondAsync("`This is an NSFW search - it can only be done within NSFW channels`");
                 return;     // Return if NSFW search called from SFW channel
@@ -324,11 +329,8 @@ namespace CommandModules{
         [Command("test"), Description("Temp function"), Hidden, RequireOwner]
         public async Task tempTestAsync(CommandContext ctx){
 
-            var memberList = ctx.Guild.GetAllMembersAsync().Result.ToArray();
-
-            foreach (var member in memberList){
-                await ctx.RespondAsync(member.Username + " : " + member.Id.ToString());
-            }
+            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame("Memes"), UserStatus.Online);
+            await ctx.RespondAsync("*mmm*, delicious federal crimes");
         }
 
 

@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Threading;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
@@ -33,12 +34,15 @@ namespace DogeNode7{
             auth_token = Reg.Util.GetFileContents(@"./auth_token.txt")[0];
 
             // Print a message on successful initialisation
-            Console.WriteLine("-//- DOG-E Initialised successfully! -//-");
+            Console.WriteLine("-//- DOG-E (unsharded) Initialised successfully! -//-");
             Console.WriteLine("Auth token: " + auth_token);
-            Console.WriteLine(BotStats.starttime);
+            Console.WriteLine("Init time:  " + BotStats.starttime);
 
             // Begin asynchronous instance
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
+
+            Console.WriteLine("THIS TEXT SHOULD NEVER PRINT");
+
         }
 
 
@@ -50,8 +54,14 @@ namespace DogeNode7{
                 Token = auth_token,
                 TokenType = TokenType.Bot,
                 UseInternalLogHandler = true,
-                LogLevel = LogLevel.Debug
+                LogLevel = LogLevel.Error
             });
+
+            bot.MessageCreated += async e =>{   // TEMP
+                if (e.Channel.IsPrivate){
+                    Console.WriteLine($"DM <{e.Author.Username}>: {e.Message.Content}");
+                }
+            };
 
             /* Bot received a message notification (Now handled by command modules)
             bot.MessageCreated += async e =>{
@@ -64,11 +74,13 @@ namespace DogeNode7{
                 StringPrefix = BotStats.strPrefix
             });
 
-            cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();     // Register and check all top level commands
-            cmd_module.RegisterCommands<CommandModules.CommandListPseudoRNG>();
+            cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();     // Register all top level commands
+            cmd_module.RegisterCommands<CommandModules.CommandListPseudoRNG>();    // Register PRNG commands
 
             await bot.ConnectAsync();   // Connect the bot
             await Task.Delay(-1);       // Wait forever
+
+            Console.WriteLine("THIS TEXT SHOULD NEVER PRINT");
         }
 
     } // Class boundary
