@@ -58,9 +58,9 @@ namespace DogeNode7{
             });
 
             // Temp handler for DMs (until DMs are handled properly in commandsnext)
-            bot.MessageCreated += async e =>{
-                if (e.Channel.IsPrivate){
-                    Console.WriteLine($"DM <{e.Author.Username}>: {e.Message.Content}");
+            bot.MessageCreated += async newMsg =>{
+                if (newMsg.Channel.IsPrivate){
+                    Console.WriteLine($"DM <{newMsg.Author.Username}>: {newMsg.Message.Content}");
                 }
             };
 
@@ -68,20 +68,28 @@ namespace DogeNode7{
             bot.MessageCreated += async e =>{
                 if (e.Message.Content.ToLower().StartsWith("$about"))
                     await e.Message.RespondAsync("pong!");
-            };*/
-
-            foreach (var item in bot.Guilds){
-                Console.WriteLine(item.ToString());
-            }
+            };*/        
             
+            bot.DmChannelCreated += async newDm =>{
+                Console.WriteLine("New DM made");
+                Console.WriteLine(newDm.Channel.ToString());
+                Console.WriteLine(newDm.Client.ToString());
+            };
+
+            bot.DmChannelDeleted += async killDm =>{
+                Console.WriteLine("DM killed");
+                Console.WriteLine(killDm.Channel.ToString());
+                Console.WriteLine(killDm.Client.ToString());
+            };
 
             // Initialise Command Interpreter
             cmd_module = bot.UseCommandsNext(new CommandsNextConfiguration{
                 StringPrefix = BotStats.strPrefix
             });
 
-            cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();     // Register all top level commands
-            cmd_module.RegisterCommands<CommandModules.CommandListPseudoRNG>();    // Register PRNG commands
+            cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();  // Register all top level commands
+            cmd_module.RegisterCommands<CommandModules.CommandListPseudoRNG>(); // Register PRNG commands
+            cmd_module.RegisterCommands<CommandModules.CommandListSudo>();      // Register Sudo commands
 
             await bot.ConnectAsync();   // Connect the bot
             await Task.Delay(-1);       // Wait forever

@@ -1,4 +1,4 @@
-/* COMMAND MODULE FOR DOG-E Node VII
+/* PRNG COMMAND MODULE FOR DOG-E Node VII
  * AgentAileron 2018
 */
 
