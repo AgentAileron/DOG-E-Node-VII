@@ -220,7 +220,7 @@ namespace CommandModules{
         // Responds with the first n results of a google search (TODO: Add more metasearch providers)
         [Command("search"), Aliases("s")]
         [Description(@"**Runs a Google search on the input and returns the result(s)**")]
-        public async Task SearchAsync(CommandContext ctx, [RemainingText] string searchInput){
+        public async Task SearchAsync(CommandContext ctx, string argIn, [RemainingText] string searchInput){
             await ctx.TriggerTypingAsync();
 
             // Initialise custom search instance
@@ -229,18 +229,52 @@ namespace CommandModules{
                 ApiKey = Reg.Util.GetFileContents(@"./auth_token.txt")[4]
             });
 
-            CseResource.ListRequest listRequest = gSearch.Cse.List(searchInput);
-            listRequest.Cx = "013372514763418131173:osz9az3ojby"; 
-            var search = listRequest.Execute();
+            string engineCX = "";   // Will define custom engine to use
+            string engineName = ""; // Will define the name of the custom engine used
+            
+            // Initialise embed
+            var embedOut = new DiscordEmbedBuilder{
+                Color = new DiscordColor(0,0,0)
+            };
 
-            string output = "```";
-            foreach (var item in search.Items){
-                output = output + "\nTitle: " + item.Title.ToString();
-                output = output + "\nLink : " + item.Link.ToString() + "\n";
+            // Check that an arg was passed
+            if (argIn[0] == '-'){
+                string engineArg = argIn[1].ToString(); // Using string for future-proofing (later integrating arg extractor method)
+
+                if (ctx.Channel.IsNSFW){    // Called in NSFW Channel
+                    switch (engineArg){
+                        default: engineCX = ""; 
+                    }
+                }else{  // SFW searches only
+                    switch (engineArg){
+
+                    }
+                }
+            }else{
+                searchInput = argIn + " " + searchInput;
             }
-            output += "\n```";
 
-            await ctx.RespondAsync(output);
+            // Set custom engine and search query
+            CseResource.ListRequest listRequest = gSearch.Cse.List(searchInput);
+            listRequest.Cx = engineCX; 
+
+            // Execute the search
+            var search = listRequest.Execute();
+            int counter = 0;
+
+            // Add top x results to embed
+            foreach (var item in search.Items){
+                embedOut.AddField(item.Title, item.Link);
+                if (counter >= 5){          // Define number of resutls to output here
+                    break;
+                }
+                counter++;
+            }
+
+            embedOut.WithAuthor($"{engineName} Search Results");
+            embedOut.Description = $"*Query: {searchInput}*";
+
+            await ctx.RespondAsync("",false,embedOut.Build());
         }
 
 
