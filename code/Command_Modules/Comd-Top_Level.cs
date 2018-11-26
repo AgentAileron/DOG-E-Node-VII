@@ -195,7 +195,7 @@ namespace CommandModules{
             
             // -- TODO: populate these --
             int activeServers = 2;
-            string dSharpVersion = "3.4.002";
+            string dSharpVersion = "<TODO>";
             string botVersion = "0.2";
             string randomFact = "Such obedience, many corporeal form - *wowe!*";
 
@@ -212,6 +212,8 @@ namespace CommandModules{
             embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dSharpVersion} | DN7 v{botVersion}", 
                         "https://i.imgur.com/qnvjk8C.png");
             embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
+            embedOut.AddField("Add me to your own server! (TEMPORARILY DISABLED)", Formatter.MaskedUrl("Default Permissions", 
+                                new Uri("https://discordapp.com/oauth2/authorize?client_id=494447566428307469&scope=bot&permissions=1341643968")));
 
             await ctx.RespondAsync("",false,embedOut.Build());    // Output embed (NB: 3rd arg in respondasync)
         }
@@ -219,8 +221,24 @@ namespace CommandModules{
 
         // Responds with the first n results of a google search (TODO: Add more metasearch providers)
         [Command("search"), Aliases("s")]
-        [Description(@"**Runs a Google search on the input and returns the result(s)**")]
-        public async Task SearchAsync(CommandContext ctx, string argIn, [RemainingText] string searchInput){
+        [Description(@"**Runs a Google custom search on the target site and returns the results**
+
+        `d`    - DuckDuckGo
+        `m`    - Music: Soundcloud, Bandcamp
+        `yt`   - Youtube
+
+        `wiki` - Wikipedia
+        `dev`  - Dev help: stackoverflow, MSDN, MDN
+        `git`  - Github
+
+        `red`  - Reddit
+        `twt`  - Twitter
+        `buy`  - Online shopping: eBay, Amazon
+
+        `cad`  - CAD: Thingiverse, GrabCAD, etc.
+        `art`  - Art: Deviantart, Weasyl, FA")]
+        public async Task SearchAsync(CommandContext ctx, [Description("<Optional> custom search to use")] string argIn, 
+                                                        [Description("EG: *$s -wiki Godwin's Law*")] [RemainingText] string searchInput){
             await ctx.TriggerTypingAsync();
 
             // Initialise custom search instance
@@ -231,6 +249,7 @@ namespace CommandModules{
 
             string engineCX = "";   // Will define custom engine to use
             string engineName = ""; // Will define the name of the custom engine used
+            bool isNSFW = false;    // Used to bar NSFW searches in SFW channel
             
             // Initialise embed
             var embedOut = new DiscordEmbedBuilder{
@@ -239,19 +258,42 @@ namespace CommandModules{
 
             // Check that an arg was passed
             if (argIn[0] == '-'){
-                string engineArg = argIn[1].ToString(); // Using string for future-proofing (later integrating arg extractor method)
+                string engineArg = argIn.Substring(1);
 
-                if (ctx.Channel.IsNSFW){    // Called in NSFW Channel
-                    switch (engineArg){
-                        default: engineCX = ""; 
-                    }
-                }else{  // SFW searches only
-                    switch (engineArg){
-
-                    }
+                // Assign relevant engine based on arg
+                switch (engineArg){
+                    case ("d"):   engineName = "DuckDuckGo";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:a3sd42z3mdw"; break;
+                    case ("dev"): engineName = "Developer";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:qkseh2q5d_0"; break;
+                    case ("git"): engineName = "GitHub";
+                                    embedOut.Color = new DiscordColor(  0,  0,  0); engineCX = "013372514763418131173:fjappre0o6y"; break;
+                    case ("wiki"):engineName = "WikiPedia";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:ws5k1hksq_m"; break;
+                    case ("yt"):  engineName = "YouTube";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:ggvh-vwmp4u"; break;
+                    case ("red"): engineName = "Reddit";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:fakt0ssmgzq"; break;
+                    case ("m"):   engineName = "Music";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:wpldyrlicbs"; break;
+                    case ("twt"): engineName = "Twitter";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:eyrkat6dklq"; break;
+                    case ("cad"): engineName = "CAD / 3D Printing";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:1ruakjrkgke"; break;
+                    case ("buy"): engineName = "Shopping";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:ugbcijzelqu"; break;
+                    case ("art"): engineName = "Art";
+                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:c5pujwhu4ue"; break;
+                    default:      engineName = "Google";
+                                    embedOut.Color = new DiscordColor( 72,133,237); engineCX = "013372514763418131173:osz9az3ojby"; break;
                 }
             }else{
                 searchInput = argIn + " " + searchInput;
+            }
+
+            if (isNSFW && !ctx.Channel.IsNSFW){
+                await ctx.RespondAsync("`This is an NSFW search - it can only be done within NSFW channels`");
+                return;     // Return if NSFW search called from SFW channel
             }
 
             // Set custom engine and search query
