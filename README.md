@@ -5,7 +5,3 @@
 *Designed for use with genuine Blackberry™ Products only.*
 
 A test bot for working with the Discord API via the D#+ wrapper. 
-
----
-
-Cheers for all the help in getting set up @Emzi0767 !
