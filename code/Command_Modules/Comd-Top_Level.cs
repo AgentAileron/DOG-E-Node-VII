@@ -195,7 +195,7 @@ namespace CommandModules{
             
             // -- TODO: populate these --
             int activeServers = 2;
-            string dSharpVersion = "<TODO>";
+            string dotnetVersion = "2.1 (arm32v7)";
             string botVersion = Reg.Util.GetFileContents(@"./version.txt")[0];
             string randomFact = "Such obedience, many corporeal form - *wowe!*";
 
@@ -209,7 +209,7 @@ namespace CommandModules{
 
             // Populate embed with info
             embedOut.WithAuthor("Dog-like Obedience: GNU - Experimental Node mk7");
-            embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dSharpVersion} | DN7 v{botVersion}", 
+            embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dotnetVersion} | DN7 v{botVersion}", 
                         "https://i.imgur.com/qnvjk8C.png");
             embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
             embedOut.AddField("Add me to your own server!", Formatter.MaskedUrl("Default Permissions", 
