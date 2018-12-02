@@ -91,7 +91,7 @@ namespace Reg{
             await msg.RespondAsync("Hash successful");
             string output = "```\n";
             
-            output += msg.Author.Username + ": ";
+            output += msg.Author.Username + ": " ;
             output += "\"" + msg.Content + "\"\n";
             output += msg.Channel;
             output += "\n```";
