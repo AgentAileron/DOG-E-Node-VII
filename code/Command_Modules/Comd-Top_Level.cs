@@ -219,7 +219,8 @@ namespace CommandModules{
                         "https://i.imgur.com/qnvjk8C.png");
             embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
             embedOut.AddField("Add me to your own server!", Formatter.MaskedUrl("Default Permissions", 
-                                new Uri("https://discordapp.com/oauth2/authorize?client_id=494447566428307469&scope=bot&permissions=1341643968")));
+                                new Uri("https://discordapp.com/oauth2/authorize?client_id=494447566428307469&scope=bot&permissions=1341643968"), 
+                                "Reminder: only give the bare minimum necessary permissions to bots on your server!"));
 
             await ctx.RespondAsync("",false,embedOut.Build());    // Output embed (NB: 3rd arg in respondasync)
         }
@@ -255,7 +256,7 @@ namespace CommandModules{
 
             string engineCX = "";   // Will define custom engine to use
             string engineName = ""; // Will define the name of the custom engine used
-            bool isNSFW = false;    // Used to bar NSFW searches in SFW channel
+            string[] nsfwSearches = {};
             
             // Initialise embed
             var embedOut = new DiscordEmbedBuilder{
@@ -266,22 +267,28 @@ namespace CommandModules{
             if (argIn[0] == '-'){
                 string engineArg = argIn.Substring(1);
 
+                // Exit when NSFW search requested in SFW channel
+                if (nsfwSearches.Contains(engineArg)){
+                    await ctx.RespondAsync("`This is an NSFW search - it can only be done within NSFW channels`");
+                    return;     // Return if NSFW search called from SFW channel
+                }
+
                 // Assign relevant engine based on arg
                 switch (engineArg){
                     case ("d"):   engineName = "DuckDuckGo";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:a3sd42z3mdw"; break;
+                                    embedOut.Color = new DiscordColor(220, 76, 38); engineCX = "013372514763418131173:a3sd42z3mdw"; break;
                     case ("dev"): engineName = "Developer";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:qkseh2q5d_0"; break;
+                                    embedOut.Color = new DiscordColor(245,128, 32); engineCX = "013372514763418131173:qkseh2q5d_0"; break;
                     case ("git"): engineName = "GitHub";
                                     embedOut.Color = new DiscordColor(  0,  0,  0); engineCX = "013372514763418131173:fjappre0o6y"; break;
                     case ("wiki"):engineName = "WikiPedia";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:ws5k1hksq_m"; break;
+                                    embedOut.Color = new DiscordColor(136,136,136); engineCX = "013372514763418131173:ws5k1hksq_m"; break;
                     case ("yt"):  engineName = "YouTube";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:ggvh-vwmp4u"; break;
+                                    embedOut.Color = new DiscordColor(254,  0,  0); engineCX = "013372514763418131173:ggvh-vwmp4u"; break;
                     case ("red"): engineName = "Reddit";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:fakt0ssmgzq"; break;
+                                    embedOut.Color = new DiscordColor(100, 27,  0); engineCX = "013372514763418131173:fakt0ssmgzq"; break;
                     case ("m"):   engineName = "Music";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:wpldyrlicbs"; break;
+                                    embedOut.Color = new DiscordColor( 98,145,155); engineCX = "013372514763418131173:wpldyrlicbs"; break;
                     case ("twt"): engineName = "Twitter";
                                     embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:eyrkat6dklq"; break;
                     case ("cad"): engineName = "CAD / 3D Printing";
@@ -293,6 +300,7 @@ namespace CommandModules{
                     default:      engineName = "Google";
                                     embedOut.Color = new DiscordColor( 72,133,237); engineCX = "013372514763418131173:osz9az3ojby"; break;
                 }
+
             }else{
                 searchInput = argIn + " " + searchInput;
                 engineName = "Google"; 
@@ -300,12 +308,6 @@ namespace CommandModules{
                 engineCX = "013372514763418131173:osz9az3ojby";
             }
 
-
-            // Exit when NSFW search requested in SFW channel
-            if (isNSFW && !ctx.Channel.IsNSFW){
-                await ctx.RespondAsync("`This is an NSFW search - it can only be done within NSFW channels`");
-                return;     // Return if NSFW search called from SFW channel
-            }
 
             // Set custom engine and search query
             CseResource.ListRequest listRequest = gSearch.Cse.List(searchInput);
@@ -327,6 +329,7 @@ namespace CommandModules{
             embedOut.WithAuthor($"{engineName} Search Results");
             embedOut.Description = $"*Query: {searchInput}*";
 
+
             await ctx.RespondAsync("",false,embedOut.Build());
         }
 
@@ -335,15 +338,15 @@ namespace CommandModules{
         [Command("test"), Description("Temp function"), Hidden, RequireOwner]
         public async Task tempTestAsync(CommandContext ctx, [RemainingText] string msgContents){
 
-            var memberList = ctx.Guild.Members;
-            foreach (var member in memberList){
-                if (member.Id.ToString() == "292602024850227210"){
-                    var DM = await DogeNode7.ProgramCode.bot.CreateDmAsync(member);
-                    await DM.SendMessageAsync(msgContents);
-                }
-            }
+            await ctx.RespondAsync("OwO");
         }
 
 
+    } // Class boundary
+
+
+    // Class to store special instructions for metasearches
+    public class metasearchQueries{
+        // TODO (+ Make calls to in above function)
     } // Class boundary
 } // NameSpace boundary
