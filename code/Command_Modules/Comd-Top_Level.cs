@@ -195,11 +195,15 @@ namespace CommandModules{
         [Command("about"), Description("Returns bot info"), Aliases("info")]
         public async Task AboutAsync(CommandContext ctx){
             
-            // -- TODO: populate these --
-            int activeServers = 2;
-            string dotnetVersion = "2.1 (arm32v7)";
+            // Get stats
+            int activeServers = 2;  // TODO
             string botVersion = Reg.Util.GetFileContents(@"./version.txt")[0];
-            string randomFact = "Such obedience, many corporeal form - *wowe!*";
+            string randomFact = "Such obedience, many corporeal form - *wowe!*";    // TODO
+
+            // Cut the version value out of csproj file (Hacky, find proper method to do this)
+            string dSharpPlusVersion = Reg.Util.GetFileContents(@"./code.csproj")[6];
+                int startIndex = dSharpPlusVersion.IndexOf("Version=\"") + 9;  // +9 is length of string described
+                dSharpPlusVersion = dSharpPlusVersion.Substring(startIndex, dSharpPlusVersion.Length - startIndex - 4); // Except 4 chars before EOL
 
             // Create an embed object
             DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder{
@@ -211,7 +215,7 @@ namespace CommandModules{
 
             // Populate embed with info
             embedOut.WithAuthor("Dog-like Obedience: GNU - Experimental Node mk7");
-            embedOut.WithFooter($"Active on {activeServers} servers | D#+ v{dotnetVersion} | DN7 v{botVersion}", 
+            embedOut.WithFooter($"Servicing {activeServers} guilds | D#+ {dSharpPlusVersion} | DN7 v{botVersion}", 
                         "https://i.imgur.com/qnvjk8C.png");
             embedOut.AddField("Want a feature added?", Formatter.MaskedUrl("Request it here!",new Uri("http://bit.ly/DN7_FeatReq"),"Flag{0man_4dd_f34tur3s}"));
             embedOut.AddField("Add me to your own server!", Formatter.MaskedUrl("Default Permissions", 

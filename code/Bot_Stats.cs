@@ -87,16 +87,7 @@ namespace Reg{
         
         // Async handler for user stats //
         public static async Task messageLogAsync(DiscordMessage msg){
-            await msg.RespondAsync("Log successful");
-            await msg.RespondAsync("Hash successful");
-            string output = "```\n";
             
-            output += msg.Author.Username + ": " ;
-            output += "\"" + msg.Content + "\"\n";
-            output += msg.Channel;
-            output += "\n```";
-
-            await msg.RespondAsync(output);
         }
 
     } // Class boundary
