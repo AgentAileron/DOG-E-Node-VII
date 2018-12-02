@@ -4,9 +4,13 @@
 */
 
 using System;
+using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Collections.Generic;
 using System.Text;
 using DSharpPlus;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 
 
@@ -81,5 +85,19 @@ namespace Reg{
             return timeOut;
         }
         
+        // Async handler for user stats //
+        public static async Task messageLogAsync(DiscordMessage msg){
+            await msg.RespondAsync("Log successful");
+            await msg.RespondAsync("Hash successful");
+            string output = "```\n";
+            
+            output += msg.Author.Username + ": ";
+            output += "\"" + msg.Content + "\"\n";
+            output += msg.Channel;
+            output += "\n```";
+
+            await msg.RespondAsync(output);
+        }
+
     } // Class boundary
 } // NameSpace boundary

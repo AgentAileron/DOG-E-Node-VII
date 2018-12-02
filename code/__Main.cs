@@ -13,10 +13,15 @@ using DSharpPlus.Entities;
 
 namespace DogeNode7{
     // Class to hold bot stats
-    public class BotStats{
+    public static class BotStats{
         public const string strPrefix = "$";
-
+        static string[] authFile = Reg.Util.GetFileContents(@"./auth.txt");
+        
         public static DateTime starttime = DateTime.Now;
+
+        public static string selfId = authFile[2];
+        public static string gAPIkey = authFile[4];
+    
     }
 
 
@@ -31,7 +36,7 @@ namespace DogeNode7{
         static void Main(string[] args){
 
             // -- Attempt to load in the auth token from file, halt execution otherwise --
-            auth_token = Reg.Util.GetFileContents(@"./auth_token.txt")[0];
+            auth_token = Reg.Util.GetFileContents(@"./auth.txt")[0];
 
             // Print a message on successful initialisation
             Console.WriteLine("-//- DOG-E (unsharded) Initialised successfully! -//-");
@@ -57,19 +62,6 @@ namespace DogeNode7{
                 LogLevel = LogLevel.Error
             });
 
-            // Temp handler for DMs (until DMs are handled properly in commandsnext)
-            bot.MessageCreated += async newMsg =>{
-                if (newMsg.Channel.IsPrivate){
-                    Console.WriteLine($"DM <{newMsg.Author.Username}>: {newMsg.Message.Content}");
-                }
-            };
-
-            /* Bot received a message notification (Now handled by command modules)
-            bot.MessageCreated += async e =>{
-                if (e.Message.Content.ToLower().StartsWith("$about"))
-                    await e.Message.RespondAsync("pong!");
-            };*/
-
             // Initialise Command Interpreter
             cmd_module = bot.UseCommandsNext(new CommandsNextConfiguration{
                 StringPrefix = BotStats.strPrefix
@@ -78,6 +70,14 @@ namespace DogeNode7{
             cmd_module.RegisterCommands<CommandModules.CommandListTopLevel>();  // Register all top level commands
             cmd_module.RegisterCommands<CommandModules.CommandListPseudoRNG>(); // Register PRNG commands
             cmd_module.RegisterCommands<CommandModules.CommandListSudo>();      // Register Sudo commands
+
+            // Event trigger for capturing user statistics
+            bot.MessageCreated += async newMsg =>{
+                if (newMsg.Author.Id.ToString() != BotStats.selfId){
+                    await Reg.StatMethod.messageLogAsync(newMsg.Message);
+                }
+
+            };
 
             await bot.ConnectAsync();   // Connect the bot
             await Task.Delay(-1);       // Wait forever

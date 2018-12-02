@@ -242,3 +242,5 @@ code/obj/Debug/netcoreapp2.1/code.assets.cache
 code/obj/Debug/netcoreapp2.1/code.assets.cache
 *.cache
 code/obj/project.assets.json
+code/obj/project.assets.json
+code/auth.txt

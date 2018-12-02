@@ -14,6 +14,8 @@ using DSharpPlus.Entities;
 
 using Google.Apis.Customsearch.v1;
 
+using DogeNode7;
+
 
 namespace CommandModules{
     [RequirePermissions(Permissions.ReadMessageHistory)]
@@ -244,7 +246,7 @@ namespace CommandModules{
             // Initialise custom search instance
             CustomsearchService gSearch = new CustomsearchService(new Google.Apis.Services.BaseClientService.Initializer{
                 ApplicationName = "DOGENode7",
-                ApiKey = Reg.Util.GetFileContents(@"./auth_token.txt")[4]
+                ApiKey = BotStats.gAPIkey
             });
 
             string engineCX = "";   // Will define custom engine to use

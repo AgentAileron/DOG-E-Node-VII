@@ -12,6 +12,8 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
+using DogeNode7;
+
 
 namespace CommandModules{
     [Group("prng"), Aliases("rng")]
@@ -24,7 +26,7 @@ namespace CommandModules{
         public async Task OTPAsync(CommandContext ctx, [Description("First user")] DiscordMember member1, [Description("Second user")] DiscordMember member2){
             await ctx.TriggerTypingAsync();
 
-            string botSelfId = Reg.Util.GetFileContents(@"./auth_token.txt")[1];   // Get the Id of this bot (must be defined in auth token file)
+            string botSelfId = BotStats.selfId;
             
             // Create the embed to eventually output
             DiscordEmbedBuilder embedOut = new DiscordEmbedBuilder{
