@@ -393,7 +393,6 @@ namespace CommandModules{
                 }
                 embedOut.WithFooter($"{String.Format("{0:#,##0}",search.SearchInformation.TotalResults)} results"); // Amount of search matches in footer
             }
-            embedOut.WithDescription("https://youtu.be/N6hVmn9FM7o");
             return embedOut;
         } 
 

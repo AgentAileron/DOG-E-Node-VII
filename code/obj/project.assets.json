@@ -5913,11 +5913,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Users\\Molar\\OneDrive - Monash University\\Projects\\DOG-E Node VII\\code\\code.csproj",
+      "projectUniqueName": "D:\\Users\\Molar\\OneDrive - Monash University\\Projects\\DOG-E Node VII\\code\\code.csproj",
       "projectName": "code",
-      "projectPath": "d:\\Users\\Molar\\OneDrive - Monash University\\Projects\\DOG-E Node VII\\code\\code.csproj",
+      "projectPath": "D:\\Users\\Molar\\OneDrive - Monash University\\Projects\\DOG-E Node VII\\code\\code.csproj",
       "packagesPath": "C:\\Users\\Molar\\.nuget\\packages\\",
-      "outputPath": "d:\\Users\\Molar\\OneDrive - Monash University\\Projects\\DOG-E Node VII\\code\\obj\\",
+      "outputPath": "D:\\Users\\Molar\\OneDrive - Monash University\\Projects\\DOG-E Node VII\\code\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
