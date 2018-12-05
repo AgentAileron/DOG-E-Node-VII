@@ -244,19 +244,13 @@ namespace CommandModules{
 
         `cad`  - CAD: Thingiverse, GrabCAD, etc.
         `art`  - Art: Deviantart, Weasyl, FA")]
-        public async Task SearchAsync(CommandContext ctx, [Description("<Optional> custom search to use")] string argIn, 
+        public async Task SearchComdAsync(CommandContext ctx, [Description("<Optional> custom search to use")] string argIn, 
                                                         [Description("EG: *$s -wiki Godwin's Law*")] [RemainingText] string searchInput){
             await ctx.TriggerTypingAsync();
 
-            // Initialise custom search instance
-            CustomsearchService gSearch = new CustomsearchService(new Google.Apis.Services.BaseClientService.Initializer{
-                ApplicationName = "DOGENode7",
-                ApiKey = BotStats.gAPIkey
-            });
-
             string engineCX = "";   // Will define custom engine to use
             string engineName = ""; // Will define the name of the custom engine used
-            string[] nsfwSearches = {};
+            string[] nsfwSearches = {}; // Define (hardcode) NSFW searches here
             
             // Initialise embed
             var embedOut = new DiscordEmbedBuilder{
@@ -273,32 +267,67 @@ namespace CommandModules{
                     return;     // Return if NSFW search called from SFW channel
                 }
 
-                // Assign relevant engine based on arg
+                // Assign relevant engine based on arg and call search (default is googleSearch())
                 switch (engineArg){
                     case ("d"):   engineName = "DuckDuckGo";
-                                    embedOut.Color = new DiscordColor(220, 76, 38); engineCX = "013372514763418131173:a3sd42z3mdw"; break;
+                                    embedOut.Color = new DiscordColor(220, 76, 38); engineCX = "013372514763418131173:a3sd42z3mdw"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("dev"): engineName = "Developer";
-                                    embedOut.Color = new DiscordColor(245,128, 32); engineCX = "013372514763418131173:qkseh2q5d_0"; break;
+                                    embedOut.Color = new DiscordColor(245,128, 32); engineCX = "013372514763418131173:qkseh2q5d_0"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("git"): engineName = "GitHub";
-                                    embedOut.Color = new DiscordColor(  0,  0,  0); engineCX = "013372514763418131173:fjappre0o6y"; break;
+                                    embedOut.Color = new DiscordColor(  0,  0,  0); engineCX = "013372514763418131173:fjappre0o6y"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("wiki"):engineName = "WikiPedia";
-                                    embedOut.Color = new DiscordColor(136,136,136); engineCX = "013372514763418131173:ws5k1hksq_m"; break;
+                                    embedOut.Color = new DiscordColor(136,136,136); engineCX = "013372514763418131173:ws5k1hksq_m"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("yt"):  engineName = "YouTube";
-                                    embedOut.Color = new DiscordColor(254,  0,  0); engineCX = "013372514763418131173:ggvh-vwmp4u"; break;
+                                    embedOut.Color = new DiscordColor(254,  0,  0); engineCX = "013372514763418131173:ggvh-vwmp4u"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("red"): engineName = "Reddit";
-                                    embedOut.Color = new DiscordColor(100, 27,  0); engineCX = "013372514763418131173:fakt0ssmgzq"; break;
+                                    embedOut.Color = new DiscordColor(100, 27,  0); engineCX = "013372514763418131173:fakt0ssmgzq"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("m"):   engineName = "Music";
-                                    embedOut.Color = new DiscordColor( 98,145,155); engineCX = "013372514763418131173:wpldyrlicbs"; break;
+                                    embedOut.Color = new DiscordColor( 98,145,155); engineCX = "013372514763418131173:wpldyrlicbs"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("twt"): engineName = "Twitter";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:eyrkat6dklq"; break;
+                                    embedOut.Color = new DiscordColor( 29,161,242); engineCX = "013372514763418131173:eyrkat6dklq"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("cad"): engineName = "CAD / 3D Printing";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:1ruakjrkgke"; break;
+                                    embedOut.Color = new DiscordColor( 35,139,250); engineCX = "013372514763418131173:1ruakjrkgke"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("buy"): engineName = "Shopping";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:ugbcijzelqu"; break;
+                                    embedOut.Color = new DiscordColor(244,163, 62); engineCX = "013372514763418131173:ugbcijzelqu"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     case ("art"): engineName = "Art";
-                                    embedOut.Color = new DiscordColor(000,000,000); engineCX = "013372514763418131173:c5pujwhu4ue"; break;
+                                    embedOut.Color = new DiscordColor(250,175, 60); engineCX = "013372514763418131173:c5pujwhu4ue"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     default:      engineName = "Google";
-                                    embedOut.Color = new DiscordColor( 72,133,237); engineCX = "013372514763418131173:osz9az3ojby"; break;
+                                    embedOut.Color = new DiscordColor( 72,133,237); engineCX = "013372514763418131173:osz9az3ojby"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut); 
+                                    break;
                 }
 
             }else{
@@ -306,8 +335,40 @@ namespace CommandModules{
                 engineName = "Google"; 
                 embedOut.Color = new DiscordColor( 72,133,237); 
                 engineCX = "013372514763418131173:osz9az3ojby";
+                embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
             }
 
+            // Populate author and description (any text to output overwritten after extraction)
+            string outputText = embedOut.Description;   // Any output text is passed via description
+            embedOut.WithAuthor($"{engineName} Search Results");
+            embedOut.Description = $"Query: {searchInput}";
+
+
+            await ctx.RespondAsync(outputText, false, embedOut.Build());  // Construct and output embed
+        }
+
+
+        // Temp command for testing
+        [Command("test"), Description("Temp function"), Hidden, RequireOwner]
+        public async Task tempTestAsync(CommandContext ctx, [RemainingText] string msgContents){
+            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame("Awoo! use prefix '$'"), UserStatus.Online);
+            await ctx.RespondAsync("Done");
+        }
+
+
+    } // Class boundary
+
+
+    // Class to store special instructions for different metasearches
+    public class metasearchQueries{
+
+        // Default custom search - puts top 5 results into embed
+        public static DiscordEmbedBuilder googleSearch(string engineCX, string searchInput, DiscordEmbedBuilder embedOut){
+            // Initialise custom search instance
+            CustomsearchService gSearch = new CustomsearchService(new Google.Apis.Services.BaseClientService.Initializer{
+                ApplicationName = "DOG-E Node VII",
+                ApiKey = BotStats.gAPIkey
+            });
 
             // Set custom engine and search query
             CseResource.ListRequest listRequest = gSearch.Cse.List(searchInput);
@@ -317,36 +378,52 @@ namespace CommandModules{
             var search = listRequest.Execute();
             int counter = 0;
 
-            // Add top x results to embed
-            foreach (var item in search.Items){
-                embedOut.AddField(item.Title, item.Link);
-                if (counter >= 5){          // Define number of resutls to output here
-                    break;
+            // --- SEARCH LOGIC --- //
+            if (search.Items == null){
+                embedOut.WithFooter("No results found :/");     // API seems to return null here when no results found
+            }else{
+                // Add top x results to embed (max provided by API is 10)
+                foreach (var item in search.Items){
+                    if (counter >= 5){          // Define number of results to output here
+                        break;
+                    }else{
+                        embedOut.AddField(item.Title, item.Link);
+                        counter++;
+                    }
                 }
-                counter++;
+                embedOut.WithFooter($"{String.Format("{0:#,##0}",search.SearchInformation.TotalResults)} results"); // Amount of search matches in footer
             }
+            embedOut.WithDescription("https://youtu.be/N6hVmn9FM7o");
+            return embedOut;
+        } 
 
-            embedOut.WithAuthor($"{engineName} Search Results");
-            embedOut.Description = $"*Query: {searchInput}*";
+        // Special formatting for YouTube search (channels and videos)
+        public static DiscordEmbedBuilder youTubeSearch(string engineCX, string searchInput, DiscordEmbedBuilder embedOut){
+            // Initialise custom search instance
+            CustomsearchService gSearch = new CustomsearchService(new Google.Apis.Services.BaseClientService.Initializer{
+                ApplicationName = "DOG-E Node VII",
+                ApiKey = BotStats.gAPIkey
+            });
 
+            // Set custom engine and search query
+            CseResource.ListRequest listRequest = gSearch.Cse.List(searchInput);
+            listRequest.Cx = engineCX; 
 
-            await ctx.RespondAsync("",false,embedOut.Build());
+            // Execute the search
+            var search = listRequest.Execute();
+            int counter = 0;
+
+            // --- SEARCH LOGIC --- //
+            if (search.Items == null){
+                embedOut.WithFooter("No results found :/");     // API seems to return null here when no results found
+            }else{
+                
+                // TODO - Logic + called in switch case
+
+                embedOut.WithFooter($"{String.Format("{0:#,##0}",search.SearchInformation.TotalResults)} results"); // Amount of search matches in footer
+            }
+            return embedOut;
         }
 
-
-        // Temp command for testing
-        [Command("test"), Description("Temp function"), Hidden, RequireOwner]
-        public async Task tempTestAsync(CommandContext ctx, [RemainingText] string msgContents){
-
-            await ctx.RespondAsync("OwO");
-        }
-
-
-    } // Class boundary
-
-
-    // Class to store special instructions for metasearches
-    public class metasearchQueries{
-        // TODO (+ Make calls to in above function)
     } // Class boundary
 } // NameSpace boundary

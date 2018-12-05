@@ -87,7 +87,7 @@ namespace Reg{
         
         // Async handler for user stats //
         public static async Task messageLogAsync(DiscordMessage msg){
-            
+            // TODO
         }
 
     } // Class boundary
