@@ -8,5 +8,6 @@
     <PackageReference Include="DSharpPlus.CommandsNext" Version="3.2.3" />
     <PackageReference Include="DSharpPlus.Interactivity" Version="3.2.3" />
     <PackageReference Include="Google.Apis.Customsearch.v1" Version="1.36.1.1369" />
+    <PackageReference Include="RestSharp" Version="106.5.4" />
   </ItemGroup>
 </Project>

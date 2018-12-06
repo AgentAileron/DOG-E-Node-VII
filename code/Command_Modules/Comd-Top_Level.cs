@@ -13,6 +13,8 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
 using Google.Apis.Customsearch.v1;
+using Newtonsoft.Json;
+using RestSharp;
 
 using DogeNode7;
 
@@ -243,9 +245,11 @@ namespace CommandModules{
         `buy`  - Online shopping: eBay, Amazon
 
         `cad`  - CAD: Thingiverse, GrabCAD, etc.
-        `art`  - Art: Deviantart, Weasyl, FA")]
+        `art`  - Art: Deviantart, Weasyl, FA
+        
+        `e621` - NSFW searches e621 tags")]
         public async Task SearchComdAsync(CommandContext ctx, [Description("<Optional> custom search to use")] string argIn, 
-                                                        [Description("EG: *$s -wiki Godwin's Law*")] [RemainingText] string searchInput){
+                                                        [Description("EG: *$s -wiki Godwin's Law*")] [RemainingText] string searchInput=""){
             await ctx.TriggerTypingAsync();
 
             string engineCX = "";   // Will define custom engine to use
@@ -324,9 +328,14 @@ namespace CommandModules{
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
                                     break;
 
-                    case ("e621"):engineName = "e621";
-                                    embedOut.Color = new DiscordColor(  0, 73,150); engineCX = "013372514763418131173:4poye3yjd8m"; 
+                    case ("sfb"): engineName = "Safebooru";
+                                    embedOut.Color = new DiscordColor(189,230,250); engineCX = "013372514763418131173:octwbr5ileo"; 
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+                    
+                    case ("e621"):engineName = "NSFW e621";
+                                    embedOut.Color = new DiscordColor(  0, 73,150); engineCX = "https://e621.net/"; 
+                                    embedOut = metasearchQueries.booruSearch(engineCX, searchInput, embedOut);
                                     break;
 
                     default:      engineName = "Google";
@@ -401,6 +410,7 @@ namespace CommandModules{
             return embedOut;
         } 
 
+
         // Special formatting for YouTube search (channels and videos)
         public static DiscordEmbedBuilder youTubeSearch(string engineCX, string searchInput, DiscordEmbedBuilder embedOut){
             // Initialise custom search instance
@@ -422,10 +432,32 @@ namespace CommandModules{
                 embedOut.WithFooter("No results found :/");     // API seems to return null here when no results found
             }else{
                 
-                // TODO - Logic + called in switch case
+                // TODO - Logic + make called in switch case
 
                 embedOut.WithFooter($"{String.Format("{0:#,##0}",search.SearchInformation.TotalResults)} results"); // Amount of search matches in footer
             }
+            return embedOut;
+        }
+
+
+        // Special formatting and direct JSON call to any site running danbooru for e621 search
+        public static DiscordEmbedBuilder booruSearch(string engineCX, string searchInput, DiscordEmbedBuilder embedOut){
+            // Initialise custom search instance
+            var client = new RestClient(engineCX);
+            var request = new RestRequest("/post/index.json", Method.POST);
+            request.AddParameter("limit", 5);
+            request.AddParameter("tags", searchInput);
+
+            IRestResponse response = client.Execute(request);
+            dynamic content = JsonConvert.DeserializeObject(response.Content);
+
+            // --- SEARCH LOGIC --- //
+            foreach (var item in content){
+                embedOut.ImageUrl = item.file_url;
+                break;
+            }
+
+
             return embedOut;
         }
 
