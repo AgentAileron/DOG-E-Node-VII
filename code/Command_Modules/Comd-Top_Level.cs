@@ -328,14 +328,14 @@ namespace CommandModules{
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
                                     break;
 
-                    case ("sfb"): engineName = "Safebooru";
+                    case ("sfb"): engineName = "Safebooru"; // TODO Colour
                                     embedOut.Color = new DiscordColor(189,230,250); engineCX = "013372514763418131173:octwbr5ileo"; 
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
                                     break;
                     
                     case ("e621"):engineName = "NSFW e621";
                                     embedOut.Color = new DiscordColor(  0, 73,150); engineCX = "https://e621.net/"; 
-                                    embedOut = metasearchQueries.booruSearch(engineCX, searchInput, embedOut);
+                                    embedOut = metasearchQueries.e621Search(engineCX, searchInput, embedOut);   // JSON Query
                                     break;
 
                     default:      engineName = "Google";
@@ -440,8 +440,8 @@ namespace CommandModules{
         }
 
 
-        // Special formatting and direct JSON call to any site running danbooru for e621 search
-        public static DiscordEmbedBuilder booruSearch(string engineCX, string searchInput, DiscordEmbedBuilder embedOut){
+        // Special formatting and direct JSON call for e621 search
+        public static DiscordEmbedBuilder e621Search(string engineCX, string searchInput, DiscordEmbedBuilder embedOut){
             // Initialise custom search instance
             var client = new RestClient(engineCX);
             var request = new RestRequest("/post/index.json", Method.POST);
