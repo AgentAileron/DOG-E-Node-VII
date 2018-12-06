@@ -250,7 +250,7 @@ namespace CommandModules{
 
             string engineCX = "";   // Will define custom engine to use
             string engineName = ""; // Will define the name of the custom engine used
-            string[] nsfwSearches = {}; // Define (hardcode) NSFW searches here
+            string[] nsfwSearches = {"e621"}; // Define (hardcode) NSFW searches here
             
             // Initialise embed
             var embedOut = new DiscordEmbedBuilder{
@@ -262,7 +262,7 @@ namespace CommandModules{
                 string engineArg = argIn.Substring(1);
 
                 // Exit when NSFW search requested in SFW channel
-                if (nsfwSearches.Contains(engineArg)){
+                if (nsfwSearches.Contains(engineArg) && !ctx.Channel.IsNSFW){
                     await ctx.RespondAsync("`This is an NSFW search - it can only be done within NSFW channels`");
                     return;     // Return if NSFW search called from SFW channel
                 }
@@ -324,6 +324,11 @@ namespace CommandModules{
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
                                     break;
 
+                    case ("e621"):engineName = "e621";
+                                    embedOut.Color = new DiscordColor(  0, 73,150); engineCX = "013372514763418131173:4poye3yjd8m"; 
+                                    embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
+                                    break;
+
                     default:      engineName = "Google";
                                     embedOut.Color = new DiscordColor( 72,133,237); engineCX = "013372514763418131173:osz9az3ojby"; 
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut); 
@@ -351,7 +356,7 @@ namespace CommandModules{
         // Temp command for testing
         [Command("test"), Description("Temp function"), Hidden, RequireOwner]
         public async Task tempTestAsync(CommandContext ctx, [RemainingText] string msgContents){
-            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame("Awoo! use prefix '$'"), UserStatus.Online);
+            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame($"{msgContents}"), UserStatus.DoNotDisturb);
             await ctx.RespondAsync("Done");
         }
 
