@@ -328,7 +328,7 @@ namespace CommandModules{
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
                                     break;
 
-                    case ("sfb"): engineName = "Safebooru"; // TODO Colour
+                    case ("sfb"): engineName = "Safebooru";
                                     embedOut.Color = new DiscordColor(189,230,250); engineCX = "013372514763418131173:octwbr5ileo"; 
                                     embedOut = metasearchQueries.googleSearch(engineCX, searchInput, embedOut);
                                     break;
@@ -365,7 +365,7 @@ namespace CommandModules{
         // Temp command for testing
         [Command("test"), Description("Temp function"), Hidden, RequireOwner]
         public async Task tempTestAsync(CommandContext ctx, [RemainingText] string msgContents){
-            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame($"{msgContents}"), UserStatus.DoNotDisturb);
+            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame($"{msgContents}"), UserStatus.Online);
             await ctx.RespondAsync("Done");
         }
 
@@ -413,6 +413,7 @@ namespace CommandModules{
 
         // Special formatting for YouTube search (channels and videos)
         public static DiscordEmbedBuilder youTubeSearch(string engineCX, string searchInput, DiscordEmbedBuilder embedOut){
+
             // Initialise custom search instance
             CustomsearchService gSearch = new CustomsearchService(new Google.Apis.Services.BaseClientService.Initializer{
                 ApplicationName = "DOG-E Node VII",
