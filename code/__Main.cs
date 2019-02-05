@@ -73,10 +73,14 @@ namespace DogeNode7{
 
             // Event trigger for capturing user statistics
             bot.MessageCreated += async newMsg =>{
-                if (newMsg.Author.Id.ToString() != BotStats.selfId){
+                if (newMsg.Author.Id.ToString() != BotStats.selfId){    // Don't act on self-sent messages
                     await Reg.StatMethod.messageLogAsync(newMsg.Message);
                 }
 
+            };
+
+            bot.PresenceUpdated += async usrChange =>{
+                await Reg.StatMethod.userStateLogAsync(usrChange.Member, usrChange.PresenceBefore, usrChange.Status);
             };
 
             await bot.ConnectAsync();   // Connect the bot

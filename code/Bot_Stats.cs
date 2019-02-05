@@ -85,8 +85,13 @@ namespace Reg{
             return timeOut;
         }
         
-        // Async handler for user stats //
+        // Async handler for incoming messages //
         public static async Task messageLogAsync(DiscordMessage msg){
+            // TODO
+        }
+
+        // Async handler for user state changes //
+        public static async Task userStateLogAsync(DiscordMember member, DiscordPresence oldPresence, string status){
             // TODO
         }
 
