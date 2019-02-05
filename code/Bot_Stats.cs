@@ -90,9 +90,38 @@ namespace Reg{
             // TODO
         }
 
-        // Async handler for user state changes //
-        public static async Task userStateLogAsync(DiscordMember member, DiscordPresence oldPresence, string status){
-            // TODO
+        // Handler for user state changes //
+        public static void logUserState(DiscordMember member, DiscordPresence oldPresence, string currStatus){
+            string filepath = @"./Data_Cache/User_Tracking/" + member.Id;   // Path to user's statfile
+            FileInfo userFile = new FileInfo(filepath);     // FileStream object for user statfile
+            
+            if (!userFile.Exists){  // Create a new statfile if non-existent for user
+                /*  -- STRUCTURE OF STATFILE --
+                *   ITEM            |   EXAMPLE
+                *   _________________________________________
+                *   <Id>            |   000000000000000000
+                *   <username>#---- |   Wumpus#0001
+                *   <last_state>    |   Online
+                *   <last_seen>     |   25/12/2031 12:00:00 AM
+                */
+                using (FileStream fs = userFile.Create()){  // Create a new statfile for user
+                    Byte[] Id = new UTF8Encoding(true).GetBytes($"{member.Id}\n");
+                        fs.Write(Id, 0, Id.Length);
+                    Byte[] username = new UTF8Encoding(true).GetBytes($"{member.Username}#{member.Discriminator}\n");
+                        fs.Write(username, 0, username.Length);
+                    Byte[] state = new UTF8Encoding(true).GetBytes($"{currStatus}\n");
+                        fs.Write(state, 0, state.Length);
+                    Byte[] lastSeen = new UTF8Encoding(true).GetBytes(DateTime.Now.ToString() + '\n');
+                        fs.Write(username, 0, username.Length);
+                    
+                }
+            }
+
+            string[] statFileContents = Reg.Util.GetFileContents(filepath); // Get the current statfile for the user
+
+
+
+            
         }
 
     } // Class boundary

@@ -71,16 +71,19 @@ namespace DogeNode7{
             cmd_module.RegisterCommands<CommandModules.CommandListPseudoRNG>(); // Register PRNG commands
             cmd_module.RegisterCommands<CommandModules.CommandListSudo>();      // Register Sudo commands
 
-            // Event trigger for capturing user statistics
+            // Event trigger for new messages
             bot.MessageCreated += async newMsg =>{
                 if (newMsg.Author.Id.ToString() != BotStats.selfId){    // Don't act on self-sent messages
                     await Reg.StatMethod.messageLogAsync(newMsg.Message);
                 }
 
             };
-
+            
+            // Event trigger for user presence changes
             bot.PresenceUpdated += async usrChange =>{
-                await Reg.StatMethod.userStateLogAsync(usrChange.Member, usrChange.PresenceBefore, usrChange.Status);
+                if (!usrChange.Member.IsBot){   // Don't log other bots
+                    await Task.Run(() => Reg.StatMethod.logUserState(usrChange.Member, usrChange.PresenceBefore, usrChange.Status));
+                }
             };
 
             await bot.ConnectAsync();   // Connect the bot
