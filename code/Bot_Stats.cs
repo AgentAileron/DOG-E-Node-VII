@@ -96,7 +96,12 @@ namespace Reg{
             // Check if there is a timeout on the current user (avoid unnecessary work when sharing multiple servers with user)
             DateTime timeOut;
             DogeNode7.BotStats.statusTimeout.TryGetValue($"{member.Id}", out timeOut);
-            if ( (timeOut == DateTime.MinValue) || (DateTime.Now - timeOut >= new TimeSpan(0,0,3)) ){ // Define timeout duration here
+            if ( (timeOut == DateTime.MinValue) || (DateTime.Now - timeOut >= new TimeSpan(0,0,1)) ){ // Define timeout duration here
+                
+                
+                // TEMP 
+                Console.WriteLine($"{member.Username}: {currStatus}");
+                foreach (string item in DogeNode7.BotStats.statusTimeout.Keys){Console.Write("  " + item + " : " + DogeNode7.BotStats.statusTimeout[item].ToShortTimeString() + '\n');}
 
                 string filepath = @"./Data_Cache/User_Tracking/" + member.Id + ".txt";   // Path to user's statfile
                 FileInfo userFile = new FileInfo(filepath);     // FileStream object for user statfile
