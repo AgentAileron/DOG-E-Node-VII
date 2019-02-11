@@ -85,8 +85,8 @@ namespace Reg{
             return timeOut;
         }
         
-        // Async handler for incoming messages //
-        public static async Task messageLogAsync(DiscordMessage msg){
+        // Handler for incoming messages //
+        public static void logMessage(DiscordMessage msg){
             // TODO
         }
 

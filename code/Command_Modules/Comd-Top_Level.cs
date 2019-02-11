@@ -426,7 +426,6 @@ namespace CommandModules{
 
             // Execute the search
             var search = listRequest.Execute();
-            int counter = 0;
 
             // --- SEARCH LOGIC --- //
             if (search.Items == null){

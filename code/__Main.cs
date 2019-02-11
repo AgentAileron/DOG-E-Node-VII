@@ -74,7 +74,7 @@ namespace DogeNode7{
             // Event trigger for new messages
             bot.MessageCreated += async newMsg =>{
                 if (newMsg.Author.Id.ToString() != BotStats.selfId){    // Don't act on self-sent messages
-                    await Reg.StatMethod.messageLogAsync(newMsg.Message);
+                    await Task.Run(() => Reg.StatMethod.logMessage(newMsg.Message));
                 }
 
             };
