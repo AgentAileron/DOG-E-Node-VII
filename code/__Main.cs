@@ -3,6 +3,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
@@ -21,6 +22,9 @@ namespace DogeNode7{
 
         public static string selfId = authFile[2];
         public static string gAPIkey = authFile[4];
+
+        // Dictionaries to hold timeouts for stat logging
+        public static Dictionary<string,DateTime> statusTimeout = new Dictionary<string,DateTime>();
     
     }
 
