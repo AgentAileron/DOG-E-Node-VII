@@ -25,6 +25,10 @@ namespace DogeNode7{
 
         // Dictionaries to hold timeouts for stat logging
         public static Dictionary<string,DateTime> statusTimeout = new Dictionary<string,DateTime>();
+
+        // Current presence
+        public static UserStatus selfStatus = UserStatus.Online;
+        public static string selfPresence = "";
     
     }
 

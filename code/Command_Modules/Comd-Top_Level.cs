@@ -365,7 +365,7 @@ namespace CommandModules{
         // Temp command for testing
         [Command("test"), Description("Temp function"), Hidden, RequireOwner]
         public async Task tempTestAsync(CommandContext ctx, [RemainingText] string msgContents){
-            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame($"{msgContents}"), UserStatus.DoNotDisturb);
+            await DogeNode7.ProgramCode.bot.UpdateStatusAsync(new DiscordGame($"{msgContents}"), UserStatus.Online);
             await ctx.RespondAsync("Done");
         }
 
